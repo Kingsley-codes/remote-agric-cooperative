@@ -3,6 +3,18 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 export type IconName =
+  | "user"
+  | "wallet"
+  | "lock"
+  | "calendar"
+  | "pie"
+  | "bolt"
+  | "clock"
+  | "grid"
+  | "chevron"
+  | "target"
+  | "eye"
+  | "coins"
   | "people"
   | "leaf"
   | "chart"
@@ -23,6 +35,18 @@ export function Icon({
   className?: string;
 }) {
   const paths: Record<IconName, ReactNode> = {
+    user: <><circle cx="12" cy="7" r="4" /><path d="M4 22v-3a8 8 0 0 1 16 0v3Z" /></>,
+    wallet: <><path d="M20 8V5H6a3 3 0 0 0 0 6h15v10H6a3 3 0 0 1-3-3V8m18 5h-5v5h5" /><path d="M6 5V3h11v2" /></>,
+    lock: <><rect x="5" y="10" width="14" height="12" rx="2" /><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v3" /></>,
+    calendar: <><rect x="3" y="5" width="18" height="17" rx="2" /><path d="M7 2v6m10-6v6M3 11h18m-14 4h1m4 0h1m4 0h1M7 18h1m4 0h1" /></>,
+    pie: <><path d="M11 2a10 10 0 1 0 11 11H11Z" /><path d="M15 2v7h7a9 9 0 0 0-7-7Z" /></>,
+    bolt: <path d="m14 2-9 12h6l-1 8 9-12h-6Z" />,
+    clock: <><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></>,
+    grid: <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
+    chevron: <path d="m9 4 8 8-8 8" />,
+    target: <><circle cx="11" cy="13" r="9" /><circle cx="11" cy="13" r="5" /><path d="m11 13 10-10m-1-2v4h4" /></>,
+    eye: <><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></>,
+    coins: <><ellipse cx="9" cy="5" rx="7" ry="3" /><path d="M2 5v4c0 1.7 3.1 3 7 3m7-7v4M2 9v4c0 1.7 3.1 3 7 3m-7-3v4c0 1.7 3.1 3 7 3" /><ellipse cx="16" cy="13" rx="6" ry="3" /><path d="M10 13v4c0 1.7 2.7 3 6 3s6-1.3 6-3v-4" /></>,
     people: (
       <>
         <circle cx="9" cy="7" r="3" />

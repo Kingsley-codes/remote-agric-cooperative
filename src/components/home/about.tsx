@@ -45,7 +45,7 @@ export function About() {
           build long-term wealth together.
         </p>
         <a
-          href="#how-it-works"
+          href="/how-it-works"
           className="mt-5 inline-flex min-h-11 items-center gap-3 font-semibold hover:text-gold"
         >
           Discover how we grow <Icon name="arrow" className="size-5" />

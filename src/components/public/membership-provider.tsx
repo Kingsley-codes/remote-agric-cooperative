@@ -76,7 +76,7 @@ export function MembershipProvider({ children }: { children: ReactNode }) {
             : "The member portal is not connected yet. Once it is available, you’ll be able to securely access your contributions, transactions, and membership information here."}
         </p>
         <Link
-          href={modal === "join" ? "/#how-it-works" : "/#faq"}
+          href={modal === "join" ? "/how-it-works" : "/#faq"}
           onClick={() => setModal(null)}
           className={`${button} mt-6 w-full gap-3 bg-brand [&_svg]:shrink-0 text-white hover:bg-brand-hover`}
         >

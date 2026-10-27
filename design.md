@@ -125,6 +125,22 @@ Use the following palette as the primary design foundation.
 
 ## 3. Typography
 
+### Public website typography (user preference)
+
+Use the homepage as the reference for public pages, including About. Keep
+the generous, readable font sizes; do not shrink text to fit a reference
+image. The compact application scale below applies to dashboards, not the
+public website.
+
+- Use Inter for body text and Lora (`font-display`) for major headings.
+- Hero headings: `clamp(2.6rem, 4.15vw, 4rem)`, with about 1.12 line height.
+- Section headings: 36–44 px; card headings: 24 px.
+- Main body copy: 18 px with relaxed line height; hero copy: 20 px on wide screens.
+- Navigation, buttons, eyebrow labels, and supporting statistics: at least 16 px.
+- Keep body copy at 18 px on mobile. Stack content and add space instead of
+  reducing the font size. Small decorative homepage overlays are not a
+  reference for body text on new pages.
+
 Use **Inter** as the preferred typeface, with a system sans-serif
 fallback.
 

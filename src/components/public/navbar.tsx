@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useMembership } from "./membership-provider";
-import { links } from "./navigation";
+import { isNavigationActive, links, navigationHref } from "./navigation";
 import { Brand, button, Icon } from "./site-ui";
 
 export function Navbar() {
@@ -57,12 +57,12 @@ export function Navbar() {
           aria-label="Main navigation"
           className="hidden items-center gap-4 xl:flex"
         >
-          {links.map(([label, id], i) => (
+          {links.map(([label, id]) => (
             <Link
               key={id}
-              href={`/#${id}`}
-              aria-current={pathname === "/" && i === 0 ? "page" : undefined}
-              className={`border-b-2 py-3 text-base font-medium transition-colors hover:text-gold focus-visible:outline-gold ${pathname === "/" && i === 0 ? "border-gold" : "border-transparent"}`}
+              href={navigationHref(id)}
+              aria-current={isNavigationActive(pathname, id) ? "page" : undefined}
+              className={`border-b-2 py-3 text-base font-medium transition-colors hover:text-gold focus-visible:outline-gold ${isNavigationActive(pathname, id) ? "border-gold" : "border-transparent"}`}
             >
               {label}
             </Link>
@@ -112,9 +112,10 @@ export function Navbar() {
             {links.map(([label, id]) => (
               <Link
                 key={id}
-                href={`/#${id}`}
+                href={navigationHref(id)}
+                aria-current={isNavigationActive(pathname, id) ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}
-                className="rounded-lg px-4 py-3 text-lg hover:bg-soft"
+                className={`rounded-lg px-4 py-3 text-lg hover:bg-soft ${isNavigationActive(pathname, id) ? "bg-soft font-semibold" : ""}`}
               >
                 {label}
               </Link>

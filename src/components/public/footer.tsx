@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MembershipButton } from "./membership-provider";
-import { links } from "./navigation";
+import { links, navigationHref } from "./navigation";
 import { Brand } from "./site-ui";
 
 export function Footer() {
@@ -21,7 +21,7 @@ export function Footer() {
               {links.slice(1, 4).map(([label, id]) => (
                 <li key={id}>
                   <Link
-                    href={`/#${id}`}
+                    href={navigationHref(id)}
                     className="inline-flex min-h-11 items-center hover:text-white hover:underline"
                   >
                     {label}
