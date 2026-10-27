@@ -17,7 +17,7 @@
 .auth-skip:focus { transform: translateY(0); }
 .auth-story { position: relative; overflow: hidden; min-height: 100%; background: #f8f2e4; color: #093c30; }
 .auth-photo { object-fit: cover; object-position: 64% center; }
-.auth-login .auth-photo { top: 24% !important; left: 35% !important; width: 85% !important; height: 76% !important; object-position: 48% center; }
+.auth-login .auth-photo { object-position: 70% center; }
 .auth-photo-wash { position: absolute; inset: 0; background: linear-gradient(90deg, #faf6ebf5 0%, #faf6ebed 33%, #faf6eb66 57%, transparent 78%), linear-gradient(180deg, #f9f6edeb 0%, #faf6ebaa 20%, transparent 55%); }
 .auth-signup .auth-photo-wash { background: linear-gradient(90deg, #faf6ebec 0%, #faf6ebdd 32%, #faf6eb55 53%, transparent 70%); }
 .auth-story-content { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100%; padding: 48px clamp(32px, 5.4vw, 84px) 48px; }
@@ -43,10 +43,6 @@
 .auth-story-note p { font-size: 17px; line-height: 1.5; }
 .auth-story-note small { display: block; margin-top: 5px; font-size: 14px; line-height: 1.55; }
 .auth-story-note a { display: flex; align-items: center; gap: 12px; margin-top: 10px; color: #f4cf59; font-size: 15px; }
-.auth-leaves { position: absolute; right: -75px; top: 90px; width: 185px; height: 270px; }
-.auth-leaves i { position: absolute; height: 170px; width: 100px; background: #2f6535; border-radius: 0 100% 0 100%; transform: rotate(-15deg); }
-.auth-leaves i:nth-child(2) { top: 85px; right: 45px; background: #d2a13c; transform: rotate(-35deg); }
-.auth-leaves i:nth-child(3) { top: 165px; right: 10px; background: #4b7139; }
 .auth-form-side { display: flex; align-items: center; justify-content: center; padding: 46px clamp(24px, 3vw, 52px); }
 .auth-card { width: 100%; max-width: 620px; padding: clamp(30px, 3.5vw, 56px); border-radius: 18px; background: var(--surface); box-shadow: 0 12px 50px #543d161f; scroll-margin-top: 20px; }
 .auth-card header h1 { font: 600 clamp(30px, 2.7vw, 44px)/1.2 var(--font-lora), Georgia, serif; letter-spacing: -.045em; }
@@ -128,9 +124,9 @@
   .auth-login .auth-intro h2 br::after { content: " "; }
   .auth-intro { max-width: 65%; }
   .auth-description { font-size: 18px; }
-  .auth-benefits, .auth-story-note, .auth-leaves { display: none; }
+  .auth-benefits, .auth-story-note { display: none; }
   .auth-photo { object-position: center 42%; }
-  .auth-login .auth-photo { top: 0 !important; left: 50% !important; width: 55% !important; height: 100% !important; object-position: center 25%; }
+  .auth-login .auth-photo { object-position: right 50%; }
   .auth-form-side { padding: 32px 24px 48px; }
   .auth-card { padding: 36px; }
 }

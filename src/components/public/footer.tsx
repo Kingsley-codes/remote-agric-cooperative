@@ -18,7 +18,7 @@ export function Footer() {
           <div>
             <h2 className="mb-4 text-sm font-semibold">Explore</h2>
             <ul className="grid gap-3 text-sm text-[#c3d4c7]">
-              {links.slice(1, 4).map(([label, id]) => (
+              {links.filter(([, id]) => id !== "home" && id !== "faq").map(([label, id]) => (
                 <li key={id}>
                   <Link
                     href={navigationHref(id)}
@@ -43,7 +43,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/#faq"
+                  href="/faq"
                   className="inline-flex min-h-11 items-center hover:text-white hover:underline"
                 >
                   Frequently Asked Questions

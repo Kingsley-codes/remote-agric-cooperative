@@ -62,9 +62,8 @@ export function AuthScreen({ mode }: { mode: "login" | "signup" }) {
     <div className={`auth-shell ${signup ? "auth-signup" : "auth-login"}`}>
       <a href="#auth-form" className="auth-skip">Skip to form</a>
       <aside className="auth-story" aria-label="About Remote Agric Cooperative">
-        <Image src={signup ? "/images/signup-farmer.png" : "/images/farmer.png"} alt="" fill priority sizes="(max-width: 1023px) 100vw, 55vw" className="auth-photo" />
+        <Image src={signup ? "/images/signup-farmer.png" : "/images/login-farmer.webp"} alt="" fill priority sizes="(max-width: 1023px) 100vw, 55vw" className="auth-photo" />
         <div className="auth-photo-wash" />
-        <div className="auth-leaves" aria-hidden="true"><i /><i /><i /></div>
         <div className="auth-story-content">
           <div className="auth-brand"><Brand /></div>
           <div className="auth-intro">
