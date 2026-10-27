@@ -63,7 +63,7 @@ export function Hero() {
         </div>
         <div className="absolute top-5 left-3 w-[148px] rounded-2xl border border-foreground/5 bg-surface/95 p-3 shadow-[0_12px_40px_#092d2920] backdrop-blur-sm sm:top-6 sm:left-5 sm:w-[172px] sm:p-4 lg:top-[15%] lg:left-0 lg:w-[182px] lg:border-0 lg:bg-surface lg:p-5">
           <div className="mb-2 flex items-center gap-2 lg:mb-3">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-soft text-brand sm:size-8 lg:size-10">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-soft text-brand-content sm:size-8 lg:size-10">
               <Icon name="people" className="size-4 sm:size-5 lg:size-6" />
             </span>
             <span className="text-[11px] leading-snug sm:text-xs lg:text-base">
@@ -107,7 +107,7 @@ export function Hero() {
               key={stat.label}
               className="flex min-w-0 flex-col items-start gap-2 rounded-xl border border-foreground/5 bg-surface/95 px-2 py-3 shadow-[0_8px_24px_#092d2918] backdrop-blur-sm sm:px-3 sm:py-4 lg:flex-row lg:items-center lg:gap-3 lg:rounded-2xl lg:border-0 lg:px-4"
             >
-              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-soft text-brand sm:size-9 lg:size-12">
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-soft text-brand-content sm:size-9 lg:size-12">
                 <Icon name={stat.icon} className="size-4 sm:size-5 lg:size-6" />
               </span>
               <div>

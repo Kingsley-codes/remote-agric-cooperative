@@ -11,16 +11,16 @@ import { Brand, button, Icon } from "./site-ui";
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
-  const { modal, openModal } = useMembership();
+  const { openMembership } = useMembership();
   const pathname = usePathname();
   useEffect(() => {
-    if (!menuOpen && !modal) return;
+    if (!menuOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [menuOpen, modal]);
+  }, [menuOpen]);
   useEffect(() => {
     if (!menuOpen) return;
     function closeOnEscape(event: KeyboardEvent) {
@@ -78,13 +78,13 @@ export function Navbar() {
           </button>
           <div className="hidden items-center gap-4 xl:flex">
             <button
-              onClick={() => openModal("signin")}
+              onClick={() => openMembership("signin")}
               className={`${button} border border-brand`}
             >
               Sign In
             </button>
             <button
-              onClick={() => openModal("join")}
+              onClick={() => openMembership("join")}
               className={`${button} bg-brand text-white hover:bg-brand-hover`}
             >
               Join Cooperative
@@ -124,7 +124,7 @@ export function Navbar() {
               <button
                 onClick={() => {
                   setMenuOpen(false);
-                  openModal("signin");
+                  openMembership("signin");
                 }}
                 className={`${button} border border-brand`}
               >
@@ -133,7 +133,7 @@ export function Navbar() {
               <button
                 onClick={() => {
                   setMenuOpen(false);
-                  openModal("join");
+                  openMembership("join");
                 }}
                 className={`${button} bg-brand text-white`}
               >

@@ -46,7 +46,7 @@ export function AboutHero() {
             />
           </div>
           <figure className="relative z-10 -mt-24 mr-4 ml-auto max-w-[300px] rounded-2xl border border-foreground/5 bg-surface p-5 shadow-[0_8px_32px_#092d2910] sm:mr-6 lg:absolute lg:right-0 lg:bottom-6 lg:m-0 lg:max-w-[265px] xl:-right-6">
-            <Icon name="leaf" className="mb-3 size-8 text-brand" />
+            <Icon name="leaf" className="mb-3 size-8 text-brand-content" />
             <blockquote className="text-lg leading-relaxed text-muted">
               “We are more than a financial platform — we are a community
               growing opportunities together.”

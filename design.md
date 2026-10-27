@@ -125,6 +125,16 @@ Use the following palette as the primary design foundation.
 
 ## 3. Typography
 
+### Theme-aware green icons
+
+Use `text-brand-content` for green icons and their icon-badge wrappers on
+every page. This semantic foreground token is forest green in light mode
+and light mint (`#a7dfbc`) in dark mode, defined in `globals.css`. Icons
+inherit it through `currentColor` in the shared `Icon` component.
+Do not use `text-brand` or hard-coded dark green for icon foregrounds.
+Keep `bg-brand` for filled buttons and brand surfaces; its color stays dark
+green in both themes. Gold and white icons retain their explicit colors.
+
 ### Public website typography (user preference)
 
 Use the homepage as the reference for public pages, including About. Keep
@@ -134,6 +144,9 @@ public website.
 
 - Use Inter for body text and Lora (`font-display`) for major headings.
 - Hero headings: `clamp(2.6rem, 4.15vw, 4rem)`, with about 1.12 line height.
+- How It Works hero uses `clamp(2.5rem, 3.5vw, 3.25rem)` and 18 px supporting
+  copy to leave more space for the portrait. Place the overview card beside
+  the portrait on wide screens; never cover a face with a content overlay.
 - Section headings: 36–44 px; card headings: 24 px.
 - Main body copy: 18 px with relaxed line height; hero copy: 20 px on wide screens.
 - Navigation, buttons, eyebrow labels, and supporting statistics: at least 16 px.

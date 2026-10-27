@@ -6,6 +6,7 @@
   --surface: #fffdf9;
   --muted: #5d6472;
   --soft: #eaf0e7;
+  --brand-content: #0b4632;
 }
 
 @theme inline {
@@ -15,6 +16,7 @@
   --color-muted: var(--muted);
   --color-soft: var(--soft);
   --color-brand: #0b4632;
+  --color-brand-content: var(--brand-content);
   --color-brand-hover: #176045;
   --color-gold: #bd8b2c;
   --font-sans: var(--font-inter);
@@ -27,6 +29,7 @@
   --surface: #1b2c24;
   --muted: #bbc5bf;
   --soft: #263b2f;
+  --brand-content: #a7dfbc;
 }
 
 body {

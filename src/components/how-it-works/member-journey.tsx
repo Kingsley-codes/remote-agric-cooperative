@@ -19,7 +19,7 @@ export function MemberJourney() {
         <ol className="mt-7 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {journey.map(({ icon, title, text }, index) => (
             <li key={title} className="relative flex items-start gap-4">
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-soft text-brand"><Icon name={icon} className="size-6" /></span>
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-soft text-brand-content"><Icon name={icon} className="size-6" /></span>
               <div>
                 <h3 className="font-display text-2xl leading-tight font-semibold tracking-tight">{title}</h3>
                 <p className="mt-2 text-lg leading-relaxed text-muted">{text}</p>

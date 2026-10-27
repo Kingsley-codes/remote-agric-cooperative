@@ -11,7 +11,7 @@ export function Principles() {
     <section aria-label="Our mission, vision, and values" className="mx-auto grid max-w-[1440px] gap-5 px-5 py-8 sm:px-8 lg:grid-cols-3 xl:px-12">
       {principles.map(({ id, title, icon, text }) => (
         <article key={id} aria-labelledby={`${id}-title`} className="flex gap-5 rounded-2xl bg-soft/45 p-6 xl:gap-6 xl:p-7">
-          <span className={`flex size-14 shrink-0 items-center justify-center rounded-full ${id === "vision" ? "bg-gold/15 text-gold" : "bg-brand/10 text-brand"}`}>
+          <span className={`flex size-14 shrink-0 items-center justify-center rounded-full ${id === "vision" ? "bg-gold/15 text-gold" : "bg-brand/10 text-brand-content"}`}>
             <Icon name={icon} className="size-8" />
           </span>
           <div>

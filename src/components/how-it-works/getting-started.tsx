@@ -17,7 +17,7 @@ export function GettingStarted() {
         {steps.map(({ icon, title, text }, index) => (
           <li key={title} className="relative flex items-start gap-4">
             <div className="flex shrink-0 flex-col items-center gap-2">
-              <span className={`flex size-14 items-center justify-center rounded-full ${index % 2 ? "bg-gold/10 text-gold" : "bg-soft text-brand"}`}>
+              <span className={`flex size-14 items-center justify-center rounded-full ${index % 2 ? "bg-gold/10 text-gold" : "bg-soft text-brand-content"}`}>
                 <Icon name={icon} className="size-7" />
               </span>
               <span className="font-display text-2xl font-semibold text-muted" aria-hidden="true">0{index + 1}</span>

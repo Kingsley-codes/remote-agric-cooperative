@@ -20,7 +20,7 @@ export function OurImpact() {
         <dl className="grid grid-cols-1 gap-y-8 min-[360px]:grid-cols-2 md:grid-cols-4">
           {statistics.map(({ icon, value, label, detail }, index) => (
             <div key={label} className="relative flex min-w-0 flex-col items-center px-3 text-center md:not-first:border-l md:border-foreground/10">
-              <span className={`mb-4 flex size-16 items-center justify-center rounded-full ${index === 1 ? "bg-gold/15 text-gold" : "bg-brand/10 text-brand"}`}><Icon name={icon} className="size-8" /></span>
+              <span className={`mb-4 flex size-16 items-center justify-center rounded-full ${index === 1 ? "bg-gold/15 text-gold" : "bg-brand/10 text-brand-content"}`}><Icon name={icon} className="size-8" /></span>
               <dt className="order-2 mt-2 text-base font-medium">{label}</dt>
               <dd className="order-1 font-display text-[27px] leading-tight font-semibold tracking-[-0.045em]">{value}</dd>
               <dd className="order-3 mt-2 max-w-[180px] text-base leading-relaxed text-muted">{detail}</dd>

@@ -41,7 +41,7 @@ export function Benefits() {
             className={`relative ${i ? "lg:pl-8 xl:pl-9" : ""} ${i !== 3 ? "lg:pr-7 lg:after:absolute lg:after:top-4 lg:after:right-0 lg:after:bottom-3 lg:after:w-px lg:after:bg-foreground/10" : ""}`}
           >
             <span
-              className={`mb-4 flex size-[72px] items-center justify-center rounded-full ${i % 2 ? "bg-[#f6ecd8] text-[#a77b21]" : "bg-soft text-brand"}`}
+              className={`mb-4 flex size-[72px] items-center justify-center rounded-full ${i % 2 ? "bg-[#f6ecd8] text-[#a77b21]" : "bg-soft text-brand-content"}`}
             >
               <Icon name={b.icon} className="size-8" />
             </span>
