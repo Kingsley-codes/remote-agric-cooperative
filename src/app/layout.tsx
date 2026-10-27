@@ -15,7 +15,7 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: "Remote Agric Cooperative | Growing Together",
   description:
-    "A community for e-farmers to save, grow, access financing, and build long-term wealth — powered by agriculture.",
+    "A community for remote farmers to save, grow, access financing, and build long-term wealth — powered by agriculture.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
