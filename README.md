@@ -2,6 +2,31 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Authentication is owned by `remote-cooperative-backend`. Set
+`NEXT_PUBLIC_API_URL` to its exact origin before building. Browser requests call
+`/auth/*` and `/admin/auth/*` on that API with credentials included. The API
+sets HttpOnly cookies; this repository contains no auth API handlers or secrets.
+
+After sign-in, pending members complete `/onboarding`, active members proceed to
+`/dashboard`, and suspended members see support information. These pages load
+identity from the backend before rendering account content, including direct
+visits. Redirects are browser navigation; API authorization stays in the backend.
+`POST /auth/accept-terms` records the accepted terms version and timestamp.
+
+Run the frontend on port 3001 (`pnpm dev --port 3001`). Configure that exact
+origin in the backend's `APP_ORIGIN` and `CORS_ORIGINS`. Register the backend's
+`/auth/google/callback` URL in Google Console and `GOOGLE_REDIRECT_URI`.
+Production should use same-site frontend and API domains with HTTPS and
+`COOKIE_SAME_SITE=lax`. Cross-site hosting needs `COOKIE_SAME_SITE=none` and
+browsers that allow third-party cookies. Existing frontend-host cookies are no
+longer used; users need to sign in again after this migration.
+
+The displayed information is the existing pilot membership/privacy information,
+not published full policies. Replace it with the approved policies before
+financial services launch. The current terms version comes from the backend's
+`currentTermsVersion`; update it alongside policy changes in both repositories.
+Financial-service eligibility remains separate from membership onboarding.
+
 First, run the development server:
 
 ```bash

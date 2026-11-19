@@ -1,8 +1,8 @@
 import { Icon } from "@/components/public/site-ui";
 
 const journey = [
-  { icon: "user", title: "Sign in", text: "Use your Remote Agric account." },
-  { icon: "people", title: "Join the cooperative", text: "Confirm your eligibility and accept the membership terms." },
+  { icon: "user", title: "Sign in", text: "Create an account or sign in with email or Google." },
+  { icon: "people", title: "Join the cooperative", text: "Verify your email and review the membership terms." },
   { icon: "grid", title: "Choose a service", text: "Start saving or apply for a loan." },
   { icon: "pie", title: "Track your progress", text: "View your balances, transactions, and returns." },
   { icon: "sprout", title: "Grow together", text: "Build a stronger financial future with the community." },

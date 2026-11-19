@@ -1,8 +1,8 @@
 import { Icon } from "@/components/public/site-ui";
 
 const steps = [
-  { icon: "user", title: "Sign In", text: "Use your existing Remote Agric login details." },
-  { icon: "shield", title: "Become a Member", text: "Your active investment on Remote Agric makes you eligible to join." },
+  { icon: "user", title: "Sign In", text: "Create an account with your email or Google, or sign in with your existing account." },
+  { icon: "shield", title: "Become a Member", text: "Verify your email to get started. No existing investment is required to register." },
   { icon: "coins", title: "Choose a Service", text: "Start contributing for the long or short term, or apply for a loan." },
   { icon: "chart", title: "Track and Grow", text: "Monitor your contributions, withdrawals, loans, and returns in one place." },
 ] as const;

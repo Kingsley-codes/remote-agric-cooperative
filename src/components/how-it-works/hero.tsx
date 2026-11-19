@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Icon } from "@/components/public/site-ui";
 
 const overview = [
-  { icon: "user", text: "Join with your existing Remote Agric account" },
+  { icon: "user", text: "Create an account with email or Google" },
   { icon: "wallet", text: "Contribute and grow your savings" },
   { icon: "loan", text: "Access loans when you need them" },
   { icon: "sprout", text: "Build a stronger future together" },
@@ -21,7 +21,7 @@ export function HowItWorksHero() {
             <span className="text-gold">Thrive</span>
           </h1>
           <p className="mt-5 max-w-[560px] text-lg leading-relaxed text-muted">
-            Remote Agric Cooperative makes it easy for e-farmers to build wealth,
+            Remote Agric Cooperative makes it easy for remote farmers to build wealth,
             access financing, and create opportunities together.
           </p>
         </div>

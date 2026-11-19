@@ -18,7 +18,7 @@ export function AboutHero() {
           </h1>
           <p className="mt-5 max-w-[670px] text-lg leading-relaxed text-muted xl:text-xl">
             Remote Agric Cooperative is a member-driven financial cooperative
-            built for e-farmers, by people who believe in the power of
+            built for remote farmers, by people who believe in the power of
             agriculture to create lasting wealth and stronger communities.
           </p>
         </div>

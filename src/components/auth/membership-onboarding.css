@@ -1,0 +1,46 @@
+.membership-page { max-width: 1440px; margin: 0 auto; padding: 32px clamp(20px, 5vw, 80px) 64px; }
+.membership-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.membership-header > button { color: var(--brand-content); font-size: 14px; border-color: var(--soft); }
+.membership-layout { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(36px, 7vw, 104px); align-items: start; margin: 72px 0 0; }
+.membership-intro { padding-top: 20px; }
+.membership-eyebrow { color: var(--brand-content); font-size: 11px; font-weight: 700; letter-spacing: .18em; }
+.membership-intro h1 { margin: 22px 0; font: 500 clamp(36px, 4vw, 56px)/1.13 var(--font-lora), Georgia, serif; letter-spacing: -.045em; }
+.membership-intro > p:not(.membership-eyebrow) { color: var(--muted); font-size: 17px; line-height: 1.75; max-width: 360px; }
+.membership-steps { display: grid; gap: 30px; margin-top: 42px; list-style: none; }
+.membership-steps li { display: flex; align-items: center; gap: 16px; }
+.membership-steps li > span { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; background: var(--soft); color: var(--brand-content); }
+.membership-steps li[aria-current] > span { background: var(--color-brand); color: white; box-shadow: 0 0 0 5px var(--soft); }
+.membership-steps strong { font-size: 15px; font-weight: 600; }
+.membership-steps p { margin-top: 5px; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.membership-help { display: flex; align-items: center; gap: 14px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--soft); color: var(--brand-content); }
+.membership-help p { font-size: 14px; }
+.membership-help a { display: block; margin-top: 5px; text-decoration: underline; text-underline-offset: 3px; }
+.membership-card { padding: clamp(24px, 3vw, 44px); background: var(--surface); border: 1px solid var(--soft); border-radius: 20px; box-shadow: 0 12px 45px #153b2510; }
+.membership-card-heading { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .16em; }
+.membership-badge { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; color: var(--brand-content); background: var(--soft); }
+.membership-card h2 { margin: 22px 0 12px; font: 500 clamp(26px, 2.6vw, 34px)/1.25 var(--font-lora), Georgia, serif; letter-spacing: -.035em; }
+.membership-card-description, .membership-card > p:not(.membership-eyebrow) { color: var(--muted); line-height: 1.7; font-size: 15px; }
+.membership-document { padding: 24px 0; margin-top: 24px; border-top: 1px solid var(--soft); border-bottom: 1px solid var(--soft); }
+.membership-version { color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .12em; }
+.membership-document section { margin-top: 22px; }
+.membership-document h3 { font-size: 14px; font-weight: 600; }
+.membership-document section p { margin-top: 7px; font-size: 13px; line-height: 1.8; color: var(--muted); }
+.membership-pilot { margin-top: 22px; padding: 14px; border-radius: 8px; background: var(--soft); font-size: 12px; line-height: 1.7; color: var(--brand-content); }
+.membership-form { display: grid; gap: 20px; margin-top: 24px; }
+.membership-consent { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; line-height: 1.7; cursor: pointer; }
+.membership-consent input { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; accent-color: var(--color-brand); }
+.membership-page .auth-primary { min-height: 52px; font-size: 15px; cursor: pointer; }
+.membership-page .auth-primary:disabled { opacity: .5; cursor: not-allowed; }
+.membership-card > .auth-primary { margin-top: 24px; }
+.membership-footnote { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; }
+.membership-error { padding: 12px; border-radius: 8px; color: #b42318; background: #fff1ef; font-size: 13px; line-height: 1.6; }
+.membership-page :is(button, a, input):focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; }
+@media (max-width: 800px) {
+  .membership-page { padding-top: 24px; }
+  .membership-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; margin-top: 32px; }
+  .membership-intro { padding-top: 0; }
+  .membership-intro h1 { font-size: 38px; }
+  .membership-intro > p:not(.membership-eyebrow) { max-width: none; font-size: 15px; }
+  .membership-steps { gap: 20px; margin-top: 28px; }
+  .membership-help { margin-top: 24px; padding-top: 18px; }
+}

@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const apiUrl = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000");
+const apiUrl = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000");
 if (
   !["http:", "https:"].includes(apiUrl.protocol) ||
+  apiUrl.origin !== (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") ||
   apiUrl.username || apiUrl.password || apiUrl.hostname.includes("*") ||
   (!isDevelopment && apiUrl.protocol !== "https:")
 ) {
