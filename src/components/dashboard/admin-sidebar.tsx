@@ -9,6 +9,8 @@ import type { SidebarControls } from "./use-sidebar";
 const navigation = [
   ["home", "Dashboard"],
   ["people", "Members"],
+  ["coins", "Long-term Contributions"],
+  ["wallet", "Short-term Contributions"],
   ["document", "Transactions"],
   ["loan", "Loan Requests"],
   ["chart", "Reports"],
@@ -42,7 +44,6 @@ export function AdminSidebar({ controls }: { controls: SidebarControls }) {
           >
             <Glyph name={icon} />
             <span>{label}</span>
-            {label === "Loan Requests" && <small>12</small>}
           </button>
         ))}
       </nav>

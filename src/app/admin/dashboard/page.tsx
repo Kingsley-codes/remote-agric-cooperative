@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, type ReactNode } from "react";
+import { FinanceScreen } from "@/components/dashboard/finance-screen";
 import { useDashboard } from "@/components/dashboard/dashboard-context";
 import {
   ActivityChart,
@@ -258,6 +259,8 @@ export default function AdminDashboardPage() {
     );
   }
 
+  if (["Long-term Contributions", "Short-term Contributions", "Transactions", "Loans", "Loan Requests"].includes(view)) return <FinanceScreen key={view} view={view} admin={admin} />;
+
   return (
     <>
         <main className="dash-content">
@@ -452,7 +455,6 @@ export default function AdminDashboardPage() {
               )}
             </>
           )}
-          {view === "Transactions" && transactionTable(true)}
           {view === "Members" && (
             <section className="dash-panel dash-section-panel">
               <div className="dash-table-heading">
@@ -562,104 +564,6 @@ export default function AdminDashboardPage() {
                 Download sample CSV <Glyph name="upload" />
               </button>
             </section>
-          )}
-          {(view === "Loans" || view === "Loan Requests") && (
-            <section className="dash-panel dash-section-panel">
-              <div className="dash-table-heading">
-                <div>
-                  <h2>{admin ? "Loan review queue" : "Your loans"}</h2>
-                  <p>
-                    {admin
-                      ? "Illustrative requests awaiting review. No live decisions can be made."
-                      : "An overview of your sample loan activity."}
-                  </p>
-                </div>
-                {!admin && (
-                  <button
-                    className="dash-green-button"
-                    onClick={() => previewAction("Apply for a Loan")}
-                  >
-                    Apply for a loan <Glyph name="arrow" />
-                  </button>
-                )}
-              </div>
-              <div className="dash-table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>{admin ? "Member" : "Reference"}</th>
-                      <th>Amount</th>
-                      <th>Status</th>
-                      <th>{admin ? "Requested" : "Next repayment"}</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{admin ? "Amina Yusuf" : "LOAN-000124"}</td>
-                      <td className="dash-amount">{money(500000)}</td>
-                      <td>
-                        <span className="dash-status processing">
-                          <i />
-                          {admin ? "Awaiting review" : "Active"}
-                        </span>
-                      </td>
-                      <td>{admin ? "Oct 20, 2026" : "Nov 05, 2026"}</td>
-                      <td>
-                        <button
-                          className="dash-text-link"
-                          onClick={() =>
-                            show(
-                              "Sample loan",
-                              <>
-                                <p>Amount: {money(500000)}</p>
-                                <p>
-                                  {admin
-                                    ? "This sample request is for layout review. Approval, rejection and disbursement are not connected."
-                                    : "This sample loan does not represent an actual loan on your account."}
-                                </p>
-                              </>,
-                            )
-                          }
-                        >
-                          View details <Glyph name="arrow" />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-          {(view === "Long-term Contributions" ||
-            view === "Short-term Contributions") && (
-            <>
-              <div className="dash-contribution-banner">
-                <div>
-                  <span>
-                    {view === "Long-term Contributions"
-                      ? "Total contributed"
-                      : "Available balance"}
-                  </span>
-                  <h2>
-                    {money(
-                      view === "Long-term Contributions" ? 1250000 : 320000,
-                    )}
-                  </h2>
-                  <p>
-                    Sample balance · financial services are not connected yet.
-                  </p>
-                </div>
-                <button
-                  className="dash-green-button"
-                  onClick={() => previewAction("Make a Contribution")}
-                >
-                  Make a contribution <Glyph name="plus" />
-                </button>
-              </div>
-              <ActivityChart platform={false} />
-              {transactionTable()}
-            </>
           )}
           <footer className="dash-footer">
             <span>© 2026 Remote Agric Cooperative</span>
