@@ -88,6 +88,19 @@ export const members = [
 
 export function Glyph({ name }: { name: string }) {
   const custom: Record<string, ReactNode> = {
+    "panel-collapse": (
+      <>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M9 4v16m7-11-3 3 3 3" />
+      </>
+    ),
+    "panel-expand": (
+      <>
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M9 4v16m4-11 3 3-3 3" />
+      </>
+    ),
+    "chevrons-vertical": <path d="m9 8 3-3 3 3m-6 8 3 3 3-3" />,
     home: (
       <>
         <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />

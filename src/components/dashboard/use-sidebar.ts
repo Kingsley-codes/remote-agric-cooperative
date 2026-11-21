@@ -29,13 +29,14 @@ export function useSidebar() {
 
     const trapFocus = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (sidebar.current?.querySelector(":popover-open")) return;
         setOpen(false);
         return;
       }
       if (event.key !== "Tab") return;
-      const controls = sidebar.current?.querySelectorAll<HTMLElement>(
+      const controls = Array.from(sidebar.current?.querySelectorAll<HTMLElement>(
         'a[href], button:not(:disabled)',
-      );
+      ) ?? []).filter((control) => control.getClientRects().length > 0);
       if (!controls?.length) return;
       const first = controls[0];
       const last = controls[controls.length - 1];
@@ -58,3 +59,5 @@ export function useSidebar() {
 
   return { collapsed, setCollapsed, open, setOpen, mobile, sidebar, opener };
 }
+
+export type SidebarControls = ReturnType<typeof useSidebar>;
