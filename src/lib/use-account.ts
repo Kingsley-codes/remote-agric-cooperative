@@ -18,11 +18,13 @@ export function useAccount(
   const [error, setError] = useState("");
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    let controller: AbortController;
+    let controller: AbortController | undefined;
+    let inFlight = false;
+    let hasAccount = false;
     function load() {
-      controller?.abort();
+      if (inFlight) return;
+      inFlight = true;
       controller = new AbortController();
-      setAccount(null);
       setError("");
       const { signal } = controller;
       void (async () => {
@@ -43,6 +45,7 @@ export function useAccount(
           if (mode === "admin") {
             if (!data.admin) throw new Error("Missing admin");
             setAccount(data.admin);
+            hasAccount = true;
           } else {
             if (!data.user) throw new Error("Missing account");
             const active = data.user.membershipStatus === "active";
@@ -51,12 +54,15 @@ export function useAccount(
               return;
             }
             setAccount(data.user);
+            hasAccount = true;
           }
         } catch {
-          if (!signal.aborted)
+          if (!signal.aborted && !hasAccount)
             setError(
               "We could not load your account. Check your connection and try again.",
             );
+        } finally {
+          inFlight = false;
         }
       })();
     }
@@ -64,7 +70,7 @@ export function useAccount(
     window.addEventListener("focus", load);
     window.addEventListener("pageshow", load);
     return () => {
-      controller.abort();
+      controller?.abort();
       window.removeEventListener("focus", load);
       window.removeEventListener("pageshow", load);
     };

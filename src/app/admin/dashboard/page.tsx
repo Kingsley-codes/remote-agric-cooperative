@@ -1,61 +1,29 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { useRef, useState, type ReactNode } from "react";
-import { SignOutButton } from "@/components/auth/sign-out-button";
+import { useDashboard } from "@/components/dashboard/dashboard-context";
 import {
   ActivityChart,
   Glyph,
   money,
   transactions,
   members,
-  type Identity,
 } from "@/components/dashboard/dashboard-ui";
-import { useAccount } from "@/lib/use-account";
-import "@/components/dashboard/dashboard.css";
 
 export default function AdminDashboardPage() {
-  const { account, error, retry } = useAccount("admin");
+  const { identity, view, navigate } = useDashboard();
   const admin: boolean = true;
-  const identity: Identity = {
-    name: account?.name ?? "",
-    email: account?.email ?? "",
-  };
-  const [view, setView] = useState("Dashboard");
   const [tab, setTab] = useState("My Overview");
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [notifications, setNotifications] = useState(false);
-  const [profile, setProfile] = useState(false);
-  const [search, setSearch] = useState("");
+  const [searchState, setSearchState] = useState({ view, value: "" });
+  const search = searchState.view === view ? searchState.value : "";
+  function setSearch(value: string) {
+    setSearchState({ view, value });
+  }
   const [modal, setModal] = useState<{ title: string; body: ReactNode } | null>(
     null,
   );
   const dialog = useRef<HTMLDialogElement>(null);
   const platform = admin || tab === "Platform Overview";
   const firstName = identity.name.split(" ")[0];
-  const initials = identity.name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-  const nav = admin
-    ? [
-        ["home", "Dashboard"],
-        ["people", "Members"],
-        ["document", "Transactions"],
-        ["loan", "Loan Requests"],
-        ["chart", "Reports"],
-        ["shield", "Settings"],
-      ]
-    : [
-        ["home", "Dashboard"],
-        ["coins", "Long-term Contributions"],
-        ["wallet", "Short-term Contributions"],
-        ["loan", "Loans"],
-        ["document", "Transactions"],
-        ["user", "Profile & Settings"],
-      ];
   const cards = platform
     ? [
         {
@@ -118,11 +86,6 @@ export default function AdminDashboardPage() {
         },
       ];
 
-  function navigate(next: string) {
-    setView(next);
-    setMenuOpen(false);
-    setSearch("");
-  }
   function show(title: string, body: ReactNode) {
     setModal({ title, body });
     dialog.current?.showModal();
@@ -295,145 +258,8 @@ export default function AdminDashboardPage() {
     );
   }
 
-  if (error)
-    return (
-      <div className="p-8" role="alert">
-        <p>{error}</p>
-        <button onClick={retry}>Try again</button>
-      </div>
-    );
-  if (!account)
-    return (
-      <p className="p-8" role="status">
-        Loading your account...
-      </p>
-    );
-
   return (
-    <div className={`dash-shell ${admin ? "dash-admin" : ""}`}>
-      {menuOpen && (
-        <button
-          className="dash-mobile-backdrop"
-          aria-label="Close navigation"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-      <aside
-        className={`dash-sidebar ${menuOpen ? "is-open" : ""}`}
-        aria-label={admin ? "Admin navigation" : "Member navigation"}
-      >
-        <Link
-          href={admin ? "/admin/dashboard" : "/dashboard"}
-          className="dash-brand"
-        >
-          <Image src="/logo.png" width={35} height={47} alt="" />
-          <span>
-            Remote Agric
-            <br />
-            Cooperative
-          </span>
-        </Link>
-        {admin && <span className="dash-workspace-tag">ADMIN WORKSPACE</span>}
-        <nav>
-          {nav.map(([icon, label]) => (
-            <button
-              key={label}
-              className={view === label ? "is-active" : ""}
-              aria-current={view === label ? "page" : undefined}
-              onClick={() => navigate(label)}
-            >
-              <Glyph name={icon} />
-              <span>{label}</span>
-              {admin && label === "Loan Requests" && <small>12</small>}
-            </button>
-          ))}
-        </nav>
-        <div className="dash-sidebar-bottom">
-          <div className="dash-help">
-            <span className="dash-help-icon">
-              <Glyph name={admin ? "shield" : "sprout"} />
-            </span>
-            <strong>
-              {admin ? "Here to make a difference." : "Growing, together."}
-            </strong>
-            <p>
-              {admin
-                ? "Every detail supports a stronger cooperative."
-                : "Small contributions. Shared possibilities."}
-            </p>
-          </div>
-          <SignOutButton admin={admin} />
-        </div>
-      </aside>
-      <div className="dash-main">
-        <header className="dash-topbar">
-          <button
-            className="dash-menu-toggle"
-            aria-label="Open navigation"
-            onClick={() => setMenuOpen(true)}
-          >
-            <Glyph name="menu" />
-          </button>
-          <span className="dash-topbar-context">
-            {admin ? "Operations workspace" : ""}
-          </span>
-          <div className="dash-topbar-actions">
-            <div className="dash-popover-wrap">
-              <button
-                className="dash-notification"
-                aria-label="Notifications"
-                aria-expanded={notifications}
-                onClick={() => {
-                  setNotifications(!notifications);
-                  setProfile(false);
-                }}
-              >
-                <Glyph name="bell" />
-                <i />
-              </button>
-              {notifications && (
-                <div className="dash-popover">
-                  <strong>You’re all caught up</strong>
-                  <p>
-                    Live notifications will appear here when available. This
-                    dashboard currently shows sample data.
-                  </p>
-                </div>
-              )}
-            </div>
-            <span className="dash-topbar-divider" />
-            <div className="dash-popover-wrap">
-              <button
-                className="dash-profile-toggle"
-                aria-expanded={profile}
-                onClick={() => {
-                  setProfile(!profile);
-                  setNotifications(false);
-                }}
-              >
-                <span className="dash-avatar">{initials}</span>
-                <span>{identity.name}</span>
-                <span className="dash-down">⌄</span>
-              </button>
-              {profile && (
-                <div className="dash-popover">
-                  <strong>{identity.name}</strong>
-                  <p>{identity.email}</p>
-                  <button
-                    className="dash-text-link"
-                    onClick={() => {
-                      navigate(admin ? "Settings" : "Profile & Settings");
-                      setProfile(false);
-                    }}
-                  >
-                    View profile <Glyph name="arrow" />
-                  </button>
-                  <SignOutButton admin={admin} />
-                </div>
-              )}
-            </div>
-          </div>
-        </header>
+    <>
         <main className="dash-content">
           <div className="dash-page-heading">
             <div>
@@ -840,7 +666,6 @@ export default function AdminDashboardPage() {
             <span>Growing a stronger future, together.</span>
           </footer>
         </main>
-      </div>
       <dialog
         className="dash-dialog"
         ref={dialog}
@@ -859,6 +684,6 @@ export default function AdminDashboardPage() {
         <h2 id="dash-dialog-title">{modal?.title}</h2>
         <div>{modal?.body}</div>
       </dialog>
-    </div>
+    </>
   );
 }
