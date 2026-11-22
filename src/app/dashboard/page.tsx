@@ -1,24 +1,20 @@
 "use client";
 import { useRef, useState, type ReactNode } from "react";
-import { FinanceScreen } from "@/components/dashboard/finance-screen";
+import { useRouter } from "next/navigation";
 import { useDashboard } from "@/components/dashboard/dashboard-context";
 import {
   ActivityChart,
   Glyph,
   money,
   transactions,
-  members,
 } from "@/components/dashboard/dashboard-ui";
 
 export default function UserDashboardPage() {
-  const { identity, view, navigate } = useDashboard();
+  const { identity } = useDashboard();
+  const router = useRouter();
   const admin: boolean = false;
   const [tab, setTab] = useState("My Overview");
-  const [searchState, setSearchState] = useState({ view, value: "" });
-  const search = searchState.view === view ? searchState.value : "";
-  function setSearch(value: string) {
-    setSearchState({ view, value });
-  }
+  const [search, setSearch] = useState("");
   const [modal, setModal] = useState<{ title: string; body: ReactNode } | null>(
     null,
   );
@@ -59,7 +55,7 @@ export default function UserDashboardPage() {
     : [
         {
           icon: "sprout",
-          label: "Long-term Contributions",
+          label: "/dashboard/long-term",
           value: money(1250000),
           note: "Total contributed",
           gold: false,
@@ -90,26 +86,6 @@ export default function UserDashboardPage() {
   function show(title: string, body: ReactNode) {
     setModal({ title, body });
     dialog.current?.showModal();
-  }
-  function previewAction(title: string) {
-    show(
-      title,
-      <>
-        <span className="dash-demo-tag">Preview</span>
-        <p>
-          This is a preview of your cooperative workspace. Contributions,
-          withdrawals and loan applications will be available when these
-          services launch.
-        </p>
-        <p>No money will move and no application will be submitted.</p>
-        <button
-          className="dash-green-button"
-          onClick={() => dialog.current?.close()}
-        >
-          Got it
-        </button>
-      </>,
-    );
   }
   function exportReport() {
     const lines = [
@@ -149,7 +125,6 @@ export default function UserDashboardPage() {
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
-  const overview = view === "Dashboard";
 
   function transactionTable(full = false) {
     return (
@@ -176,7 +151,7 @@ export default function UserDashboardPage() {
           ) : (
             <button
               className="dash-text-link"
-              onClick={() => navigate("Transactions")}
+              onClick={() => router.push("/dashboard/transactions")}
             >
               View All Transactions <Glyph name="arrow" />
             </button>
@@ -259,317 +234,199 @@ export default function UserDashboardPage() {
     );
   }
 
-  if (["Long-term Contributions", "Short-term Contributions", "Transactions", "Loans", "Loan Requests"].includes(view)) return <FinanceScreen key={view} view={view} admin={admin} />;
-
   return (
     <>
-        <main className="dash-content">
-          <div className="dash-page-heading">
-            <div>
-              <p className="dash-breadcrumb">
-                {admin ? "Admin" : "Dashboard"}
-                {!overview && ` / ${view}`}
-              </p>
-              <h1>{overview ? `Welcome back, ${firstName}` : view}</h1>
-              <p className="dash-subtitle">
-                {overview
-                  ? admin
-                    ? "Here is what’s happening across your cooperative."
-                    : "Here is a summary of your cooperative activity."
-                  : "A clear view of your cooperative workspace."}
-              </p>
-            </div>
-            <div className="dash-heading-meta">
-              <span className="dash-demo-tag">Sample data</span>
-              <time dateTime="2026-10-29">Thu, 29 Oct 2026</time>
-            </div>
+      <main className="dash-content">
+        <div className="dash-page-heading">
+          <div>
+            <p className="dash-breadcrumb">{admin ? "Admin" : "Dashboard"}</p>
+            <h1>{`Welcome back, ${firstName}`}</h1>
+            <p className="dash-subtitle">
+              Here is a summary of your cooperative activity.
+            </p>
           </div>
-          {overview && (
-            <>
-              <div
-                className="dash-tabs"
-                role="tablist"
-                aria-label="Dashboard overview"
+          <div className="dash-heading-meta">
+            <span className="dash-demo-tag">Sample data</span>
+            <time dateTime="2026-10-29">Thu, 29 Oct 2026</time>
+          </div>
+        </div>
+        <>
+          <div
+            className="dash-tabs"
+            role="tablist"
+            aria-label="Dashboard overview"
+          >
+            {(admin
+              ? ["Platform Overview", "Operations"]
+              : ["My Overview", "Platform Overview"]
+            ).map((label) => (
+              <button
+                role="tab"
+                aria-selected={
+                  admin
+                    ? tab === label ||
+                      (label === "Platform Overview" && tab === "My Overview")
+                    : tab === label
+                }
+                key={label}
+                className={
+                  (admin &&
+                    tab === "My Overview" &&
+                    label === "Platform Overview") ||
+                  tab === label
+                    ? "is-active"
+                    : ""
+                }
+                onClick={() => setTab(label)}
               >
-                {(admin
-                  ? ["Platform Overview", "Operations"]
-                  : ["My Overview", "Platform Overview"]
-                ).map((label) => (
-                  <button
-                    role="tab"
-                    aria-selected={
-                      admin
-                        ? tab === label ||
-                          (label === "Platform Overview" &&
-                            tab === "My Overview")
-                        : tab === label
-                    }
-                    key={label}
-                    className={
-                      (admin &&
-                        tab === "My Overview" &&
-                        label === "Platform Overview") ||
-                      tab === label
-                        ? "is-active"
-                        : ""
-                    }
-                    onClick={() => setTab(label)}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-              <div className="dash-stat-grid">
-                {cards.map((card, i) => (
-                  <button
-                    className="dash-stat"
-                    key={card.label}
-                    onClick={() =>
-                      platform
-                        ? navigate(
-                            admin
-                              ? [
-                                  "Members",
-                                  "Reports",
-                                  "Loan Requests",
-                                  "Reports",
-                                ][i]
-                              : [
-                                  "Profile & Settings",
-                                  "Long-term Contributions",
-                                  "Loans",
-                                  "Long-term Contributions",
-                                ][i],
-                          )
-                        : navigate(
-                            [
-                              "Long-term Contributions",
-                              "Short-term Contributions",
-                              "Loans",
-                              "Long-term Contributions",
-                            ][i],
-                          )
-                    }
-                  >
-                    <span
-                      className={`dash-round-icon ${card.gold ? "gold" : ""}`}
-                    >
-                      <Glyph name={card.icon} />
-                    </span>
-                    <span className="dash-stat-copy">
-                      <span>{card.label}</span>
-                      <strong>{card.value}</strong>
-                      <small>{card.note}</small>
-                    </span>
-                    <Glyph name="chevron" />
-                  </button>
-                ))}
-              </div>
-              {admin && tab === "Operations" ? (
-                <section className="dash-panel dash-operations">
-                  <h2>Operations at a glance</h2>
-                  <p>Sample queues for the operations team.</p>
-                  <div>
-                    <button onClick={() => navigate("Loan Requests")}>
-                      <strong>12</strong>Loan requests awaiting review
-                      <Glyph name="arrow" />
-                    </button>
-                    <button onClick={() => navigate("Transactions")}>
-                      <strong>4</strong>Withdrawals processing
-                      <Glyph name="arrow" />
-                    </button>
-                    <button onClick={() => navigate("Members")}>
-                      <strong>28</strong>New members this month
-                      <Glyph name="arrow" />
-                    </button>
-                  </div>
-                </section>
-              ) : (
-                <div className="dash-middle-grid">
-                  <ActivityChart platform={platform} />
-                  <section className="dash-panel dash-quick-actions">
-                    <h2>Quick Actions</h2>
-                    {(admin
-                      ? [
-                          ["people", "View Members"],
-                          ["loan", "Review Loan Requests"],
-                          ["document", "View All Transactions"],
-                          ["upload", "Export Report"],
-                        ]
-                      : [
-                          ["plus", "Make a Contribution"],
-                          ["upload", "Request a Withdrawal"],
-                          ["loan", "Apply for a Loan"],
-                          ["document", "View All Transactions"],
-                        ]
-                    ).map(([icon, label], i) => (
-                      <button
-                        key={label}
-                        className={i === 0 ? "is-primary" : ""}
-                        onClick={() =>
-                          admin
-                            ? label === "Export Report"
-                              ? exportReport()
-                              : navigate(
-                                  label === "View Members"
-                                    ? "Members"
-                                    : label === "Review Loan Requests"
-                                      ? "Loan Requests"
-                                      : "Transactions",
-                                )
-                            : label === "View All Transactions"
-                              ? navigate("Transactions")
-                              : previewAction(label)
-                        }
-                      >
-                        <Glyph name={icon} />
-                        <span>{label}</span>
-                        <Glyph name="arrow" />
-                      </button>
-                    ))}
-                  </section>
-                </div>
-              )}
-              {transactionTable()}
-              {!admin && (
-                <section className="dash-discover">
-                  <span className="dash-round-icon">
-                    <Glyph name="sprout" />
-                  </span>
-                  <div>
-                    <h2>Meet Remote Agric</h2>
-                    <p>
-                      Your cooperative account is also your first step into
-                      Remote Agric. Discover the people and opportunities behind
-                      our agricultural community.
-                    </p>
-                  </div>
-                  <a
-                    href="https://remoteagricng.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Explore Remote Agric <Glyph name="arrow" />
-                  </a>
-                </section>
-              )}
-            </>
-          )}
-          {view === "Members" && (
-            <section className="dash-panel dash-section-panel">
-              <div className="dash-table-heading">
-                <div>
-                  <h2>Cooperative members</h2>
-                  <p>Sample member directory</p>
-                </div>
-                <label className="dash-search">
-                  <Glyph name="search" />
-                  <input
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Search members"
-                    aria-label="Search members"
-                  />
-                </label>
-              </div>
-              <div className="dash-table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Member</th>
-                      <th>Farmer ID</th>
-                      <th>Joined</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {members
-                      .filter((member) =>
-                        `${member.name} ${member.email}`
-                          .toLowerCase()
-                          .includes(search.toLowerCase()),
-                      )
-                      .map((member) => (
-                        <tr key={member.id}>
-                          <td>
-                            <strong>{member.name}</strong>
-                            <small className="dash-cell-subtitle">
-                              {member.email}
-                            </small>
-                          </td>
-                          <td>{member.id}</td>
-                          <td>{member.joined}</td>
-                          <td>
-                            <span
-                              className={`dash-status ${member.status === "Active" ? "completed" : "processing"}`}
-                            >
-                              <i />
-                              {member.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-          {(view === "Profile & Settings" || view === "Settings") && (
-            <section className="dash-panel dash-section-panel">
-              <h2>{admin ? "Administrator profile" : "Your profile"}</h2>
-              <p>Your signed-in account details.</p>
-              <dl className="dash-details">
-                <div>
-                  <dt>Name</dt>
-                  <dd>{identity.name}</dd>
-                </div>
-                <div>
-                  <dt>Email</dt>
-                  <dd>{identity.email}</dd>
-                </div>
-                <div>
-                  <dt>{admin ? "Access" : "Farmer ID"}</dt>
-                  <dd>
-                    {admin
-                      ? "Cooperative administrator"
-                      : identity.reference || "Not available"}
-                  </dd>
-                </div>
-              </dl>
-              <p>Profile editing will be available in a future update.</p>
-            </section>
-          )}
-          {view === "Reports" && (
-            <section className="dash-panel dash-section-panel">
-              <span className="dash-demo-tag">Sample report</span>
-              <h2>Cooperative activity report</h2>
-              <p>
-                October 2026 · Contributions, withdrawals and loan activity.
-              </p>
-              <div className="dash-report-grid">
-                <div>
-                  <span>Transactions shown</span>
-                  <strong>5</strong>
-                </div>
-                <div>
-                  <span>Contribution volume</span>
-                  <strong>{money(250000)}</strong>
-                </div>
-                <div>
-                  <span>Processing withdrawals</span>
-                  <strong>{money(80000)}</strong>
-                </div>
-              </div>
-              <button className="dash-green-button" onClick={exportReport}>
-                Download sample CSV <Glyph name="upload" />
+                {label}
               </button>
+            ))}
+          </div>
+          <div className="dash-stat-grid">
+            {cards.map((card, i) => (
+              <button
+                className="dash-stat"
+                key={card.label}
+                onClick={() =>
+                  platform
+                    ? router.push(
+                        admin
+                          ? [
+                              "/admin/dashboard/members",
+                              "/admin/dashboard/reports",
+                              "/admin/dashboard/loans",
+                              "/admin/dashboard/reports",
+                            ][i]
+                          : [
+                              "/dashboard/profile",
+                              "/dashboard/long-term",
+                              "/dashboard/loans",
+                              "/dashboard/long-term",
+                            ][i],
+                      )
+                    : router.push(
+                        [
+                          "/dashboard/long-term",
+                          "/dashboard/short-term",
+                          "/dashboard/loans",
+                          "/dashboard/long-term",
+                        ][i],
+                      )
+                }
+              >
+                <span className={`dash-round-icon ${card.gold ? "gold" : ""}`}>
+                  <Glyph name={card.icon} />
+                </span>
+                <span className="dash-stat-copy">
+                  <span>{card.label}</span>
+                  <strong>{card.value}</strong>
+                  <small>{card.note}</small>
+                </span>
+                <Glyph name="chevron" />
+              </button>
+            ))}
+          </div>
+          {admin && tab === "Operations" ? (
+            <section className="dash-panel dash-operations">
+              <h2>Operations at a glance</h2>
+              <p>Sample queues for the operations team.</p>
+              <div>
+                <button onClick={() => router.push("/admin/dashboard/loans")}>
+                  <strong>12</strong>Loan requests awaiting review
+                  <Glyph name="arrow" />
+                </button>
+                <button onClick={() => router.push("/dashboard/transactions")}>
+                  <strong>4</strong>Withdrawals processing
+                  <Glyph name="arrow" />
+                </button>
+                <button onClick={() => router.push("/admin/dashboard/members")}>
+                  <strong>28</strong>New members this month
+                  <Glyph name="arrow" />
+                </button>
+              </div>
+            </section>
+          ) : (
+            <div className="dash-middle-grid">
+              <ActivityChart platform={platform} />
+              <section className="dash-panel dash-quick-actions">
+                <h2>Quick Actions</h2>
+                {(admin
+                  ? [
+                      ["people", "View Members"],
+                      ["loan", "Review Loan Requests"],
+                      ["document", "View All Transactions"],
+                      ["upload", "Export Report"],
+                    ]
+                  : [
+                      ["plus", "Make a Contribution"],
+                      ["upload", "Request a Withdrawal"],
+                      ["loan", "Apply for a Loan"],
+                      ["document", "View All Transactions"],
+                    ]
+                ).map(([icon, label], i) => (
+                  <button
+                    key={label}
+                    className={i === 0 ? "is-primary" : ""}
+                    onClick={() =>
+                      admin
+                        ? label === "Export Report"
+                          ? exportReport()
+                          : router.push(
+                              label === "View Members"
+                                ? "/admin/dashboard/members"
+                                : label === "Review Loan Requests"
+                                  ? "/admin/dashboard/loans"
+                                  : "/dashboard/transactions",
+                            )
+                        : label === "View All Transactions"
+                          ? router.push("/dashboard/transactions")
+                          : router.push(
+                              label === "Apply for a Loan"
+                                ? "/dashboard/loans"
+                                : label === "Request a Withdrawal"
+                                  ? "/dashboard/short-term"
+                                  : "/dashboard/long-term",
+                            )
+                    }
+                  >
+                    <Glyph name={icon} />
+                    <span>{label}</span>
+                    <Glyph name="arrow" />
+                  </button>
+                ))}
+              </section>
+            </div>
+          )}
+          {transactionTable()}
+          {!admin && (
+            <section className="dash-discover">
+              <span className="dash-round-icon">
+                <Glyph name="sprout" />
+              </span>
+              <div>
+                <h2>Meet Remote Agric</h2>
+                <p>
+                  Your cooperative account is also your first step into Remote
+                  Agric. Discover the people and opportunities behind our
+                  agricultural community.
+                </p>
+              </div>
+              <a
+                href="https://remoteagricng.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Explore Remote Agric <Glyph name="arrow" />
+              </a>
             </section>
           )}
-          <footer className="dash-footer">
-            <span>© 2026 Remote Agric Cooperative</span>
-            <span>Growing a stronger future, together.</span>
-          </footer>
-        </main>
+        </>
+        <footer className="dash-footer">
+          <span>© 2026 Remote Agric Cooperative</span>
+          <span>Growing a stronger future, together.</span>
+        </footer>
+      </main>
       <dialog
         className="dash-dialog"
         ref={dialog}

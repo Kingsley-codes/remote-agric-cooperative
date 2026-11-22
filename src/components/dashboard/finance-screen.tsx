@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import { Glyph } from "./dashboard-ui";
+import { useRouter } from "next/navigation";
+import { LoanTerms } from "@/components/loan-terms";
 import {
   categoryLabels,
   currency,
@@ -82,15 +84,16 @@ function Detail({ label, children }: { label: string; children: ReactNode }) {
 }
 
 export function FinanceScreen({
-  view,
+  section,
   admin = false,
 }: {
-  view: string;
+  section: keyof typeof titles;
   admin?: boolean;
 }) {
-  const longTerm = view === "Long-term Contributions";
-  const contributions = longTerm || view === "Short-term Contributions";
-  const loans = view === "Loans" || view === "Loan Requests";
+  const router = useRouter();
+  const longTerm = section === "Long-term Contributions";
+  const contributions = longTerm || section === "Short-term Contributions";
+  const loans = section === "Loans" || section === "Loan Requests";
   const prefix = admin ? "/admin/finance" : "/finance";
   const [history, setHistory] = useState("contributions");
   const kind =
@@ -243,16 +246,15 @@ export function FinanceScreen({
       if (!reference) return;
       params.delete("reference");
       params.delete("trxref");
-      params.set("view", "Transactions");
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}?${params}`,
+      params.delete("view");
+      router.replace(
+        `/dashboard/transactions${params.size ? `?${params}` : ""}`,
+        { scroll: false },
       );
       void verify(reference);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [admin, verify]);
+  }, [admin, verify, router]);
 
   function open(
     next: NonNullable<typeof mode>,
@@ -480,11 +482,11 @@ export function FinanceScreen({
             <span>/</span>{" "}
             {contributions ? "Contributions" : loans ? "Borrowing" : "Activity"}
           </p>
-          <h1>{titles[view]}</h1>
+          <h1>{titles[section]}</h1>
           <p>
             {admin && contributions
               ? `Manage ${longTerm ? "long-term" : "short-term"} contributions across the cooperative.`
-              : descriptions[view]}
+              : descriptions[section]}
           </p>
         </div>
         <div className="fin-heading-actions">
@@ -810,12 +812,12 @@ export function FinanceScreen({
                 <Detail label="Loan fee">
                   {eligibility?.policy.enabled
                     ? `${eligibility.policy.flatFeeBps / 100}% flat fee`
-                    : "Terms not yet published"}
+                    : "Loan pricing unavailable"}
                 </Detail>
                 <Detail label="Repayment period">
                   {eligibility?.policy.enabled
                     ? `Up to ${eligibility.policy.maxMonths} months`
-                    : "Available with published terms"}
+                    : "Available when loan pricing is configured"}
                 </Detail>
               </dl>
             </section>
@@ -1803,13 +1805,29 @@ export function FinanceScreen({
                         placeholder="Tell us what the loan will support…"
                       />
                     </label>
+                    <details
+                      open
+                      className="rounded-xl border border-current/15 p-4"
+                    >
+                      <summary className="cursor-pointer font-semibold">
+                        Loan terms · {eligibility?.policy.termsVersion}
+                      </summary>
+                      <div className="mt-4">
+                        <LoanTerms />
+                        <p className="mt-4">
+                          One-time flat fee: {currency(fee)} (
+                          {(eligibility?.policy.flatFeeBps ?? 0) / 100}%). Total
+                          to repay: {currency(amountKobo + fee)}.
+                        </p>
+                      </div>
+                    </details>
                     <a
                       className="fin-row-link"
-                      href={eligibility?.policy.termsUrl}
+                      href="/loan-terms"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Read the published loan terms <Glyph name="arrow" />
+                      Open loan terms in a new tab <Glyph name="arrow" />
                     </a>
                     <label className="fin-checkbox">
                       <input
@@ -1819,10 +1837,9 @@ export function FinanceScreen({
                         onChange={(e) => setConsent(e.target.checked)}
                       />
                       <span>
-                        I accept the published loan terms (
+                        I accept the loan terms (version{" "}
                         {eligibility?.policy.termsVersion}), including the
-                        stated fee, repayment obligations and applicable
-                        collateral or recovery consent.
+                        displayed fee and repayment obligations.
                       </span>
                     </label>
                   </>

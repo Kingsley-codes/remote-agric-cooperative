@@ -6,10 +6,12 @@
   --fin-muted: #667085;
   --fin-soft: #edf3ed;
   --fin-green: #123b2a;
+  container: finance / inline-size;
+  line-height: 1.6;
   max-width: 1600px;
   margin: auto;
   color: var(--fin-ink);
-  font-size: 14px;
+  font-size: 16px;
 }
 .fin-heading {
   display: flex;
@@ -19,7 +21,7 @@
   margin: 8px 0 30px;
 }
 .fin-eyebrow {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 650;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -30,7 +32,7 @@
   opacity: 0.5;
 }
 .fin-heading h1 {
-  font-size: clamp(26px, 2.2vw, 32px);
+  font-size: clamp(30px, 2.4vw, 36px);
   line-height: 1.3;
   letter-spacing: -0.9px;
   font-weight: 650;
@@ -38,7 +40,7 @@
 }
 .fin-heading p:not(.fin-eyebrow) {
   color: var(--fin-muted);
-  font-size: 15px;
+  font-size: 16px;
 }
 .fin-heading-actions,
 .fin-form-actions {
@@ -55,7 +57,7 @@
   min-height: 44px;
   padding: 11px 17px;
   border-radius: 9px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   white-space: nowrap;
   transition: background 0.15s;
@@ -105,7 +107,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--fin-muted);
 }
@@ -120,7 +122,7 @@
 }
 .fin-stat > strong {
   display: block;
-  font-size: clamp(23px, 2vw, 29px);
+  font-size: clamp(28px, 2.2vw, 34px);
   line-height: 1.3;
   letter-spacing: -1px;
   font-weight: 650;
@@ -131,7 +133,7 @@
 .fin-stat small {
   display: block;
   color: var(--fin-muted);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.6;
 }
 .fin-context-grid {
@@ -155,7 +157,7 @@
   border-radius: 12px;
 }
 .fin-screen h2 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.3px;
 }
@@ -164,7 +166,7 @@
 .fin-eligibility p {
   color: var(--fin-muted);
   margin-top: 9px;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   max-width: 65ch;
 }
@@ -180,7 +182,7 @@
 }
 .fin-terms .fin-muted {
   display: block;
-  font-size: 13px;
+  font-size: 16px;
   margin-top: 8px;
 }
 .fin-muted {
@@ -200,15 +202,15 @@
   gap: 16px;
 }
 .fin-section-heading h2 {
-  font-size: 18px;
+  font-size: 22px;
 }
 .fin-section-heading p {
   color: var(--fin-muted);
-  font-size: 13px;
+  font-size: 16px;
   margin-top: 5px;
 }
 .fin-count {
-  font-size: 12px;
+  font-size: 14px;
   border: 1px solid var(--fin-border);
   padding: 4px 9px;
   border-radius: 20px;
@@ -234,7 +236,7 @@
 .fin-form label {
   display: block;
   color: var(--fin-muted);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 .fin-filters input,
@@ -253,7 +255,7 @@
   min-height: 41px;
   margin-top: 6px;
   font: inherit;
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-search > div {
   position: relative;
@@ -276,7 +278,7 @@
 .fin-screen table {
   border-collapse: collapse;
   width: 100%;
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-screen thead {
   background: color-mix(in srgb, var(--fin-soft) 50%, var(--fin-surface));
@@ -285,7 +287,7 @@
   padding: 12px 22px;
   text-align: left;
   color: var(--fin-muted);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   border-block: 1px solid var(--fin-border);
   white-space: nowrap;
@@ -306,14 +308,14 @@
 }
 .fin-screen td small {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--fin-muted);
   margin-top: 5px;
 }
 .fin-reference {
   font-family: var(--font-inter), sans-serif;
   overflow-wrap: anywhere;
-  font-size: 12px;
+  font-size: 14px;
 }
 .fin-screen .fin-numeric {
   text-align: right;
@@ -334,7 +336,7 @@
   white-space: nowrap;
   padding: 4px 9px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 550;
   color: #536054;
   background: #eef1ed;
@@ -368,7 +370,7 @@
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--brand-content);
   font-weight: 600;
 }
@@ -391,12 +393,12 @@
   margin-bottom: 16px;
 }
 .fin-empty h3 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 550;
   margin-bottom: 9px;
 }
 .fin-empty p {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-muted);
   line-height: 1.8;
 }
@@ -410,7 +412,7 @@
   padding: 15px 25px;
   gap: 12px;
   border-top: 1px solid var(--fin-border);
-  font-size: 12px;
+  font-size: 14px;
 }
 .fin-pagination > div {
   display: flex;
@@ -432,7 +434,7 @@
   margin-top: 8px;
 }
 .fin-pool p {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-muted);
   margin: 8px 0 24px;
 }
@@ -445,17 +447,17 @@
 }
 .fin-pool dt,
 .fin-eligibility dt {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--fin-muted);
   margin-bottom: 6px;
 }
 .fin-pool dd {
-  font-size: 19px;
+  font-size: 22px;
   font-weight: 550;
   font-variant-numeric: tabular-nums;
 }
 .fin-asof {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--fin-muted);
   margin: 20px 0;
 }
@@ -467,7 +469,7 @@
   padding: 14px 18px;
   border-radius: 9px;
   margin-bottom: 20px;
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-error {
   background: #feeceb;
@@ -499,7 +501,7 @@
   background: var(--fin-soft);
 }
 .fin-eligibility h2 {
-  font-size: 18px;
+  font-size: 22px;
   margin-top: 9px;
 }
 .fin-eligibility dl {
@@ -511,7 +513,7 @@
   border-left: 1px solid var(--fin-border);
 }
 .fin-eligibility dd {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
 }
 .fin-journey {
@@ -524,7 +526,7 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-muted);
 }
 .fin-journey span {
@@ -535,14 +537,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 14px;
   background: var(--fin-surface);
   color: var(--brand-content);
 }
 .fin-dialog {
   margin: auto;
   padding: 28px;
-  width: min(560px, calc(100vw - 32px));
+  width: min(640px, calc(100vw - 32px));
   max-height: 90dvh;
   overflow-y: auto;
   background: var(--fin-surface);
@@ -564,7 +566,7 @@
 }
 .fin-dialog h2 {
   margin-top: 8px;
-  font-size: 21px;
+  font-size: 24px;
 }
 .fin-dialog-heading > button {
   padding: 7px;
@@ -583,12 +585,12 @@
   margin-bottom: 18px;
 }
 .fin-detail-amount > strong {
-  font-size: 31px;
+  font-size: 34px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .fin-detail-amount > span:not(.fin-status) {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-muted);
 }
 .fin-details {
@@ -600,7 +602,7 @@
   justify-content: space-between;
   gap: 20px;
   border-bottom: 1px solid var(--fin-border);
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-details dt {
   color: var(--fin-muted);
@@ -612,7 +614,7 @@
   min-width: 0;
 }
 .fin-detail-note {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--fin-muted);
   margin: 16px 0 24px;
@@ -625,13 +627,13 @@
   gap: 18px;
 }
 .fin-form label {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-ink);
 }
 .fin-form small {
   display: block;
   color: var(--fin-muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 7px;
 }
 .fin-form textarea,
@@ -642,7 +644,7 @@
 .fin-form input,
 .fin-form select,
 .fin-form textarea {
-  font-size: 14px;
+  font-size: 16px;
   min-height: 46px;
 }
 .fin-amount-input {
@@ -656,14 +658,14 @@
 }
 .fin-amount-input input {
   padding-left: 33px;
-  font-size: 20px;
+  font-size: 24px;
 }
 .fin-form .fin-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   color: var(--fin-muted);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
 }
 .fin-checkbox input {
@@ -678,7 +680,7 @@
   margin-top: 8px;
 }
 .fin-form > p {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--fin-muted);
   line-height: 1.7;
 }
@@ -687,13 +689,13 @@
   background: #feeceb;
   color: #b42318;
   border-radius: 7px;
-  font-size: 13px;
+  font-size: 16px;
   margin-bottom: 16px;
 }
 .fin-decision {
   border-top: 1px solid var(--fin-border);
   padding-top: 18px;
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-decision > div {
   display: flex;
@@ -712,7 +714,7 @@
   margin-bottom: 24px;
 }
 .fin-schedule h3 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -721,7 +723,7 @@
   justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px solid var(--fin-border);
-  font-size: 13px;
+  font-size: 16px;
   gap: 12px;
 }
 .fin-screen td .fin-overdue {
@@ -746,7 +748,7 @@
     align-items: flex-start;
   }
 }
-@media (max-width: 650px) {
+@media (max-width: 800px) {
   .fin-heading {
     flex-direction: column;
     gap: 18px;
@@ -763,17 +765,17 @@
     padding: 15px;
   }
   .fin-stat > div {
-    font-size: 12px;
+    font-size: 14px;
     align-items: flex-start;
   }
   .fin-stat-icon {
     display: none;
   }
   .fin-stat > strong {
-    font-size: 23px;
+    font-size: 28px;
   }
   .fin-stat small {
-    font-size: 12px;
+    font-size: 14px;
   }
   .fin-context {
     padding: 20px;
@@ -824,7 +826,7 @@
   .fin-screen td::before {
     content: attr(data-label);
     color: var(--fin-muted);
-    font-size: 12px;
+    font-size: 14px;
   }
   .fin-screen td:first-child {
     display: block;
@@ -879,7 +881,7 @@
     gap: 12px 18px;
   }
   .fin-journey div {
-    font-size: 12px;
+    font-size: 14px;
   }
   .fin-dialog {
     padding: 22px 18px;
@@ -888,7 +890,7 @@
     flex: 1;
   }
   .fin-detail-amount > strong {
-    font-size: 28px;
+    font-size: 30px;
   }
   .fin-decision > div {
     flex-direction: column;
@@ -909,7 +911,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 14px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--fin-muted);
 }
 .fin-destination button {
@@ -931,7 +933,7 @@
   padding: 0 0 12px;
   border-bottom: 2px solid transparent;
   color: var(--fin-muted);
-  font-size: 13px;
+  font-size: 16px;
 }
 .fin-history-tabs button[aria-pressed="true"] {
   border-color: var(--brand-content);
@@ -944,8 +946,64 @@
 .fin-screen .fin-details + .fin-detail-note {
   margin-top: 16px;
 }
-@media (max-width: 650px) {
+@media (max-width: 800px) {
   .fin-history-tabs {
     padding-inline: 16px;
+  }
+}
+
+@container finance (max-width: 900px) {
+  .fin-screen table,
+  .fin-screen tbody,
+  .fin-screen tr,
+  .fin-screen td {
+    display: block;
+    width: 100%;
+  }
+  .fin-screen thead {
+    display: none;
+  }
+  .fin-screen tbody tr {
+    padding: 17px 16px;
+    border-top: 1px solid var(--fin-border);
+  }
+  .fin-screen td {
+    padding: 6px 0;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .fin-screen td::before {
+    content: attr(data-label);
+    color: var(--fin-muted);
+    font-size: 14px;
+  }
+  .fin-screen td:first-child {
+    display: block;
+    margin-bottom: 7px;
+  }
+  .fin-screen td:first-child::before {
+    display: none;
+  }
+  .fin-screen td:last-child {
+    justify-content: flex-end;
+  }
+  .fin-screen td:last-child .fin-row-link {
+    min-height: 36px;
+  }
+  .fin-screen td small {
+    flex-basis: 100%;
+  }
+  .fin-screen td.fin-numeric small {
+    text-align: right;
+  }
+  .fin-screen td[colspan] {
+    display: block;
+  }
+  .fin-screen td[colspan]::before {
+    display: none;
   }
 }

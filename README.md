@@ -27,6 +27,13 @@ financial services launch. The current terms version comes from the backend's
 `currentTermsVersion`; update it alongside policy changes in both repositories.
 Financial-service eligibility remains separate from membership onboarding.
 
+Loan terms are maintained in `src/components/loan-terms.tsx`, shared by the
+frontend `/loan-terms` page and the loan application form. No backend terms URL
+is required. The application uses the backend policy for pricing, repayment
+limits and the current loan terms version, and submits consent and that version
+for recording. Update the displayed terms and backend `LOAN_TERMS_VERSION`
+together when loan terms change.
+
 First, run the development server:
 
 ```bash

@@ -125,6 +125,19 @@ Use the following palette as the primary design foundation.
 
 ## 3. Typography
 
+### Dashboard typography and routing (user preference)
+
+Dashboard body copy, table values, inputs, buttons, navigation and financial
+terms use 16 px text. Supporting metadata, references, status badges and helper
+text use at least 14 px. Section headings use 20-24 px, page headings 30-36 px,
+and key financial values 28-34 px. Keep this scale on mobile; stack content or
+add space instead of shrinking the text.
+
+Every member and admin navigation destination has its own App Router folder
+and `page.tsx`. Use `next/link` for sidebar navigation and `usePathname` for the
+active link. Shared layouts contain the workspace shell and account context;
+they must not switch page content using local state or a `view` query parameter.
+
 ### Theme-aware green icons
 
 Use `text-brand-content` for green icons and their icon-badge wrappers on

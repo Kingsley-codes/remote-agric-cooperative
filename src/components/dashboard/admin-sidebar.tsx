@@ -1,23 +1,24 @@
 "use client";
 
-import { useDashboard } from "./dashboard-context";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Glyph } from "./dashboard-ui";
 import { SidebarAccount } from "./sidebar-account";
 import { SidebarHeader } from "./sidebar-header";
 import type { SidebarControls } from "./use-sidebar";
 
 const navigation = [
-  ["home", "Dashboard"],
-  ["people", "Members"],
-  ["coins", "Long-term Contributions"],
-  ["wallet", "Short-term Contributions"],
-  ["document", "Transactions"],
-  ["loan", "Loan Requests"],
-  ["chart", "Reports"],
+  ["home", "Dashboard", "/admin/dashboard"],
+  ["people", "Members", "/admin/dashboard/members"],
+  ["coins", "Long-term Contributions", "/admin/dashboard/long-term"],
+  ["wallet", "Short-term Contributions", "/admin/dashboard/short-term"],
+  ["document", "Transactions", "/admin/dashboard/transactions"],
+  ["loan", "Loan Requests", "/admin/dashboard/loans"],
+  ["chart", "Reports", "/admin/dashboard/reports"],
 ];
 
 export function AdminSidebar({ controls }: { controls: SidebarControls }) {
-  const { view, navigate } = useDashboard();
+  const pathname = usePathname();
   const { sidebar, mobile, open } = controls;
 
   return (
@@ -33,18 +34,19 @@ export function AdminSidebar({ controls }: { controls: SidebarControls }) {
       <SidebarHeader admin controls={controls} />
       <span className="dash-workspace-tag">ADMIN WORKSPACE</span>
       <nav aria-label="Dashboard pages">
-        {navigation.map(([icon, label]) => (
-          <button
+        {navigation.map(([icon, label, href]) => (
+          <Link
+            href={href}
             key={label}
-            className={view === label ? "is-active" : ""}
-            aria-current={view === label ? "page" : undefined}
+            className={pathname === href ? "is-active" : ""}
+            aria-current={pathname === href ? "page" : undefined}
             aria-label={label}
             title={label}
-            onClick={() => navigate(label)}
+            onClick={() => controls.setOpen(false)}
           >
             <Glyph name={icon} />
             <span>{label}</span>
-          </button>
+          </Link>
         ))}
       </nav>
       <SidebarAccount admin controls={controls} />

@@ -53,7 +53,7 @@
   gap: 8px;
   margin-top: 37px;
 }
-.dash-sidebar nav > button {
+.dash-sidebar nav > a {
   display: flex;
   align-items: center;
   text-align: left;
@@ -61,14 +61,14 @@
   min-height: 43px;
   padding: 11px 14px;
   border-radius: 7px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #26364b;
   transition: background 0.15s;
 }
-.dash-sidebar nav > button:hover {
+.dash-sidebar nav > a:hover {
   background: #f0f3ed;
 }
-.dash-sidebar nav > button.is-active {
+.dash-sidebar nav > a.is-active {
   background: #e6f0e5;
   color: #064a33;
   font-weight: 600;
@@ -81,7 +81,7 @@
   margin-left: auto;
   background: #f5eacb;
   padding: 2px 6px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   border-radius: 4px;
 }
 .dash-sidebar-bottom {
@@ -89,7 +89,7 @@
   padding: 20px 9px 0;
 }
 .dash-workspace-tag {
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.2em;
   margin: 17px 9px -10px;
   color: #73816e;
@@ -106,7 +106,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #244b40;
 }
 .dash-content {
@@ -122,7 +122,7 @@
   margin-bottom: 22px;
 }
 .dash-breadcrumb {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #65748a;
   margin-bottom: 7px;
 }
@@ -149,7 +149,7 @@
 }
 .dash-heading-meta time {
   color: #64728a;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 .dash-demo-tag {
   display: inline-flex;
@@ -157,7 +157,7 @@
   background: #f0f3e9;
   border-radius: 4px;
   color: #74816b;
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 0.02em;
   padding: 3px 6px;
 }
@@ -170,7 +170,7 @@
 .dash-tabs > button {
   padding: 0 25px 13px;
   position: relative;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #536078;
 }
@@ -235,7 +235,7 @@
   flex: 1;
 }
 .dash-stat-copy > span {
-  font-size: 0.875rem;
+  font-size: 1rem;
   white-space: nowrap;
 }
 .dash-stat-copy strong {
@@ -245,7 +245,7 @@
   white-space: nowrap;
 }
 .dash-stat-copy small {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--dash-muted);
   line-height: 1.5;
 }
@@ -275,7 +275,7 @@
   line-height: 1.5;
 }
 .dash-panel p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--dash-muted);
   line-height: 1.8;
 }
@@ -301,7 +301,7 @@
   flex-shrink: 0;
 }
 .dash-select select {
-  font-size: 0.875rem;
+  font-size: 1rem;
   padding: 9px;
   border: 1px solid #e8ebe7;
   border-radius: 6px;
@@ -322,7 +322,7 @@
 }
 .dash-chart-plot text {
   font-family: var(--font-inter), Arial, sans-serif;
-  font-size: 0.875rem;
+  font-size: 1rem;
   fill: #64718a;
 }
 .dash-chart-legend {
@@ -331,7 +331,7 @@
   justify-content: center;
   flex-wrap: wrap;
   margin: 6px 0 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #65738b;
 }
 .dash-chart-legend > span {
@@ -363,12 +363,12 @@
   border: 1px solid #d8e3d9;
   border-radius: 7px;
   box-shadow: 0 3px 12px #153b2414;
-  font-size: 0.875rem;
+  font-size: 1rem;
   display: grid;
   gap: 4px;
 }
 .dash-chart-tooltip strong {
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 .dash-quick-actions {
   padding: 17px 18px;
@@ -385,7 +385,7 @@
   border-radius: 6px;
   padding: 13px 15px;
   margin-top: 6px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #163427;
   min-height: 45px;
   text-align: left;
@@ -421,7 +421,7 @@
 }
 .dash-text-link {
   color: #075038;
-  font-size: 0.875rem;
+  font-size: 1rem;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -442,7 +442,7 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.875rem;
+  font-size: 1rem;
   white-space: nowrap;
 }
 .dash-transactions th,
@@ -483,7 +483,7 @@
   gap: 6px;
   border-radius: 5px;
   padding: 4px 8px;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 .dash-type.contribution {
   background: #fff1d0;
@@ -518,7 +518,7 @@
 }
 .dash-row-action {
   padding: 0 8px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   letter-spacing: 1px;
   color: #49627b;
 }
@@ -536,11 +536,11 @@
   flex: 1;
 }
 .dash-discover h2 {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #31583d;
 }
 .dash-discover p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #77836f;
   max-width: 650px;
@@ -549,7 +549,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #285f3d;
   white-space: nowrap;
 }
@@ -562,7 +562,7 @@
   justify-content: space-between;
   gap: 20px;
   padding: 23px 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #99a196;
 }
 .dash-menu-toggle {
@@ -589,7 +589,7 @@
   color: #7d8b7b;
 }
 .dash-search input {
-  font-size: 0.875rem;
+  font-size: 1rem;
   outline: none;
   width: 150px;
   background: transparent;
@@ -597,7 +597,7 @@
 .dash-cell-subtitle {
   display: block;
   color: #96a08e;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin-top: 5px;
 }
 .dash-details {
@@ -609,7 +609,7 @@
   gap: 20px;
   padding: 12px 0;
   border-bottom: 1px solid #edf0e8;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 .dash-details dt {
   text-transform: capitalize;
@@ -635,7 +635,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #7d8b73;
 }
 .dash-report-grid strong {
@@ -651,7 +651,7 @@
   color: #fff;
   padding: 12px 18px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 .dash-green-button svg {
   height: 17px;
@@ -671,7 +671,7 @@
   margin-bottom: 15px;
 }
 .dash-contribution-banner span {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #68805c;
 }
 .dash-contribution-banner h2 {
@@ -681,7 +681,7 @@
   color: #245438;
 }
 .dash-contribution-banner p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #7c8d72;
 }
 .dash-content > .dash-chart {
@@ -701,7 +701,7 @@
   border-radius: 8px;
   padding: 18px;
   text-align: left;
-  font-size: 0.875rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -736,7 +736,7 @@
   letter-spacing: -0.5px;
 }
 .dash-dialog p {
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.8;
   color: #71816c;
   margin: 12px 0;
@@ -776,13 +776,13 @@
     font-size: 1.5625rem;
   }
   .dash-stat-copy > span {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-round-icon {
     width: 55px;
     height: 55px;
   }
-  .dash-sidebar nav > button {
+  .dash-sidebar nav > a {
     font-size: 1rem;
     min-height: 48px;
   }
@@ -790,22 +790,22 @@
     font-size: 1rem;
   }
   .dash-panel p {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-transactions table,
   .dash-section-panel table {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-type,
   .dash-status {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-quick-actions > button {
-    font-size: 0.875rem;
+    font-size: 1rem;
     padding: 15px;
   }
   .dash-chart-legend {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-topbar {
     height: 70px;
@@ -825,10 +825,10 @@
     margin-left: var(--dash-sidebar-width);
     width: calc(100% - var(--dash-sidebar-width));
   }
-  .dash-sidebar nav > button {
+  .dash-sidebar nav > a {
     gap: 10px;
     padding: 10px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-brand {
     font-size: 1.0625rem;
@@ -843,13 +843,13 @@
     gap: 9px;
   }
   .dash-stat-copy > span {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-stat-copy strong {
     font-size: 1.125rem;
   }
   .dash-stat-copy small {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-stat .dash-round-icon {
     width: 35px;
@@ -872,22 +872,22 @@
     gap: 8px;
   }
   .dash-panel-heading h2 {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-panel-heading .dash-round-icon {
     display: none;
   }
   .dash-chart-legend {
     gap: 12px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-quick-actions > button {
     padding: 11px 10px;
     gap: 10px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-select select {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
 @media (max-width: 950px) {
@@ -895,7 +895,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .dash-stat-copy > span {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-stat-copy strong {
     font-size: 1.4375rem;
@@ -918,13 +918,13 @@
   }
   .dash-quick-actions > button {
     margin-top: 0;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-page-heading h1 {
     font-size: 1.5625rem;
   }
   .dash-subtitle {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-discover {
     align-items: flex-start;
@@ -940,10 +940,10 @@
     grid-template-columns: 1fr;
   }
   .dash-heading-meta time {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-chart-legend {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
 @media (max-width: 900px) {
@@ -972,7 +972,7 @@
   .dash-topbar-context {
     margin-right: auto;
     margin-left: 12px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-topbar {
     padding: 0 19px;
@@ -1002,7 +1002,7 @@
     font-size: 1.4375rem;
   }
   .dash-subtitle {
-    font-size: 0.875rem;
+    font-size: 1rem;
     max-width: 260px;
   }
   .dash-heading-meta {
@@ -1012,7 +1012,7 @@
     display: none;
   }
   .dash-tabs > button {
-    font-size: 0.875rem;
+    font-size: 1rem;
     padding: 0 18px 12px;
   }
   .dash-stat {
@@ -1022,14 +1022,14 @@
     position: relative;
   }
   .dash-stat-copy > span {
-    font-size: 0.875rem;
+    font-size: 1rem;
     white-space: normal;
   }
   .dash-stat-copy strong {
     font-size: 1.1875rem;
   }
   .dash-stat-copy small {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-stat .dash-round-icon {
     height: 30px;
@@ -1047,7 +1047,7 @@
   }
   .dash-chart-legend {
     gap: 10px;
-    font-size: 0.875rem;
+    font-size: 1rem;
     justify-content: flex-start;
   }
   .dash-chart-legend i {
@@ -1058,14 +1058,14 @@
     gap: 4px;
   }
   .dash-panel-heading h2 {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-panel p {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-select select {
     padding: 7px;
-    font-size: 0.875rem;
+    font-size: 1rem;
     max-width: 106px;
   }
   .dash-table-heading {
@@ -1074,20 +1074,20 @@
     flex-wrap: wrap;
   }
   .dash-table-heading h2 {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-text-link {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-transactions td,
   .dash-transactions th,
   .dash-section-panel td,
   .dash-section-panel th {
     padding: 9px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-quick-actions > button {
-    font-size: 0.875rem;
+    font-size: 1rem;
     gap: 8px;
     padding: 12px 10px;
   }
@@ -1108,14 +1108,14 @@
     height: 35px;
   }
   .dash-discover p {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-discover a {
     margin-left: 45px;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-footer {
-    font-size: 0.875rem;
+    font-size: 1rem;
     padding: 20px 0;
   }
   .dash-footer > span:last-child {
@@ -1130,7 +1130,7 @@
     padding: 20px;
   }
   .dash-details > div {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-popover {
     width: 230px;
@@ -1146,10 +1146,10 @@
   }
   .dash-chart-tooltip {
     left: 8%;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .dash-demo-tag {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
 .dash-shell {
@@ -1188,9 +1188,9 @@
 }
 .dash-sidebar-toggle:hover, .dash-menu-toggle:hover { background: #edf3e9; }
 .dash-sidebar nav { margin-top: 28px; }
-.dash-sidebar nav > button { min-height: 48px; font-size: 1rem; gap: 12px; }
-.dash-sidebar nav > button span { min-width: 0; }
-.dash-workspace-tag { font-size: 0.75rem; letter-spacing: 0.12em; }
+.dash-sidebar nav > a { min-height: 48px; font-size: 1rem; gap: 12px; }
+.dash-sidebar nav > a span { min-width: 0; }
+.dash-workspace-tag { font-size: 0.875rem; letter-spacing: 0.12em; }
 .dash-sidebar-bottom {
   margin-top: auto;
   padding: 16px 0 0;
@@ -1217,7 +1217,7 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 .dash-account-copy {
@@ -1238,8 +1238,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.dash-account-copy strong { font-size: 0.875rem; font-weight: 600; }
-.dash-account-copy > span { font-size: 0.875rem; color: var(--dash-muted); }
+.dash-account-copy strong { font-size: 1rem; font-weight: 600; }
+.dash-account-copy > span { font-size: 1rem; color: var(--dash-muted); }
 .dash-account > svg { width: 16px; height: 16px; color: #778572; }
 .dash-account-menu {
   position: fixed;
@@ -1264,9 +1264,9 @@
   margin-bottom: 4px;
   border-bottom: 1px solid #e9ede6;
 }
-.dash-account-menu-heading > strong { font-size: 0.875rem; font-weight: 600; }
-.dash-account-menu-heading > span { font-size: 0.875rem; color: var(--dash-muted); }
-.dash-account-menu-heading > small { font-size: 0.75rem; color: #506a57; }
+.dash-account-menu-heading > strong { font-size: 1rem; font-weight: 600; }
+.dash-account-menu-heading > span { font-size: 1rem; color: var(--dash-muted); }
+.dash-account-menu-heading > small { font-size: 0.875rem; color: #506a57; }
 .dash-account-menu-item {
   display: flex;
   align-items: center;
@@ -1275,7 +1275,7 @@
   min-height: 44px;
   padding: 10px;
   border-radius: 7px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   text-align: left;
 }
 .dash-account-menu-item:hover { background: #f0f4ed; }
@@ -1283,27 +1283,27 @@
 .dash-account-menu-sign-out { color: #a1392c; }
 .dash-account-menu-sign-out:hover { background: #fff1ee; }
 .dash-account-menu-item:disabled { cursor: wait; opacity: 0.65; }
-.dash-account-menu > p { padding: 8px 10px; font-size: 0.875rem; color: #a1392c; }
+.dash-account-menu > p { padding: 8px 10px; font-size: 1rem; color: #a1392c; }
 .dash-mobile-bar { display: none; }
 .dash-main { transition: margin-left 0.2s, width 0.2s; }
 .dash-content { padding-top: 32px; }
 .dash-panel p, .dash-subtitle, .dash-dialog p { font-size: 1rem; }
 .dash-panel h2, .dash-discover h2 { font-size: 1.125rem; }
-.dash-stat-copy > span { font-size: 0.875rem; white-space: normal; }
+.dash-stat-copy > span { font-size: 1rem; white-space: normal; }
 .dash-stat-copy strong { font-size: clamp(1.375rem, 1.8vw, 1.875rem); }
 .dash-stat { gap: 12px; padding: 20px 16px; }
 .dash-stat-copy strong { white-space: normal; overflow-wrap: anywhere; }
-.dash-stat-copy small { font-size: 0.875rem; }
+.dash-stat-copy small { font-size: 1rem; }
 .dash-select select { max-width: 160px; min-height: 44px; font-size: 1rem; }
 .dash-search input { font-size: 1rem; width: min(200px, 100%); min-width: 0; }
 .dash-search { max-width: 100%; min-height: 44px; }
 .dash-quick-actions > button, .dash-green-button, .dash-tabs > button { font-size: 1rem; min-height: 44px; }
-.dash-transactions td, .dash-transactions th, .dash-section-panel td, .dash-section-panel th { font-size: 0.875rem; padding: 12px; }
+.dash-transactions td, .dash-transactions th, .dash-section-panel td, .dash-section-panel th { font-size: 1rem; padding: 12px; }
 .dash-row-action { min-height: 44px; min-width: 44px; }
 .dash-chart-plot { overflow-x: auto; }
 .dash-chart-plot > svg { min-width: 540px; }
 .dash-chart-hitareas { min-width: 490px; }
-.dash-chart-plot text { font-size: 0.875rem; }
+.dash-chart-plot text { font-size: 1rem; }
 .dash-panel-heading { flex-wrap: wrap; }
 .dash-page-heading h1 { font-size: clamp(1.75rem, 2.5vw, 2.125rem); }
 @media (min-width: 901px) {
@@ -1312,11 +1312,11 @@
   .is-collapsed .dash-sidebar-heading { flex-direction: column; }
   .is-collapsed .dash-brand span,
   .is-collapsed .dash-workspace-tag,
-  .is-collapsed .dash-sidebar nav > button span,
+  .is-collapsed .dash-sidebar nav > a span,
   .is-collapsed .dash-sidebar nav small,
   .is-collapsed .dash-account-copy,
   .is-collapsed .dash-account > svg { display: none; }
-  .is-collapsed .dash-sidebar nav > button { justify-content: center; padding-inline: 0; }
+  .is-collapsed .dash-sidebar nav > a { justify-content: center; padding-inline: 0; }
   .is-collapsed .dash-account { justify-content: center; padding-inline: 0; }
 }
 @media (max-width: 1400px) {
@@ -1355,3 +1355,14 @@
 @media (prefers-reduced-motion: reduce) {
   .dash-sidebar, .dash-main { transition: none; }
 }
+
+/* Application typography stays readable at every viewport size. */
+.dash-shell { font-size: 1rem; line-height: 1.6; }
+.dash-page-heading h1 { font-size: clamp(1.875rem, 2.4vw, 2.25rem); }
+.dash-panel h2, .dash-discover h2 { font-size: 1.375rem; line-height: 1.4; }
+.dash-panel p, .dash-subtitle, .dash-dialog p { font-size: 1rem; line-height: 1.7; }
+.dash-stat-copy > span, .dash-stat-copy small { font-size: 1rem; }
+.dash-stat-copy strong { font-size: clamp(1.75rem, 2.2vw, 2.125rem); }
+.dash-sidebar nav > a { display: flex; align-items: center; text-decoration: none; }
+.dash-account-menu-item { text-decoration: none; }
+.dash-content { min-width: 0; }

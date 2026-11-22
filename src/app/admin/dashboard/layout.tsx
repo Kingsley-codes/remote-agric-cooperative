@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Glyph, type Identity } from "@/components/dashboard/dashboard-ui";
 import { DashboardContext } from "@/components/dashboard/dashboard-context";
 import { AdminSidebar } from "@/components/dashboard/admin-sidebar";
@@ -8,19 +8,18 @@ import { useSidebar } from "@/components/dashboard/use-sidebar";
 import { useAccount } from "@/lib/use-account";
 import "@/components/dashboard/dashboard.css";
 
-export default function AdminDashboardLayout({ children }: { children: ReactNode }) {
+export default function AdminDashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { account, error, retry } = useAccount("admin");
-  const [view, setView] = useState("Dashboard");
   const sidebarControls = useSidebar();
   const { collapsed, open, setOpen, mobile, opener } = sidebarControls;
   const identity: Identity = {
     name: account?.name ?? "",
     email: account?.email ?? "",
   };
-  function navigate(next: string) {
-    setView(next);
-    setOpen(false);
-  }
 
   if (error)
     return (
@@ -37,13 +36,31 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
     );
 
   return (
-    <DashboardContext.Provider value={{ identity, view, navigate }}>
-      <div className={`dash-shell dash-admin ${collapsed ? "is-collapsed" : ""}`}>
-        {mobile && open && <button className="dash-mobile-backdrop" tabIndex={-1} aria-label="Close navigation" onClick={() => setOpen(false)} />}
+    <DashboardContext.Provider value={{ identity }}>
+      <div
+        className={`dash-shell dash-admin ${collapsed ? "is-collapsed" : ""}`}
+      >
+        {mobile && open && (
+          <button
+            className="dash-mobile-backdrop"
+            tabIndex={-1}
+            aria-label="Close navigation"
+            onClick={() => setOpen(false)}
+          />
+        )}
         <AdminSidebar controls={sidebarControls} />
         <div className="dash-main" inert={mobile && open}>
           <header className="dash-mobile-bar">
-            <button ref={opener} className="dash-menu-toggle" aria-label="Open navigation" aria-controls="dashboard-navigation" aria-expanded={open} onClick={() => setOpen(true)}><Glyph name="menu" /></button>
+            <button
+              ref={opener}
+              className="dash-menu-toggle"
+              aria-label="Open navigation"
+              aria-controls="dashboard-navigation"
+              aria-expanded={open}
+              onClick={() => setOpen(true)}
+            >
+              <Glyph name="menu" />
+            </button>
             <span>Admin workspace</span>
           </header>
           {children}

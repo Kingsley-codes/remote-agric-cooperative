@@ -1,21 +1,22 @@
 "use client";
 
-import { useDashboard } from "./dashboard-context";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Glyph } from "./dashboard-ui";
 import { SidebarAccount } from "./sidebar-account";
 import { SidebarHeader } from "./sidebar-header";
 import type { SidebarControls } from "./use-sidebar";
 
 const navigation = [
-  ["home", "Dashboard"],
-  ["coins", "Long-term Contributions"],
-  ["wallet", "Short-term Contributions"],
-  ["loan", "Loans"],
-  ["document", "Transactions"],
+  ["home", "Dashboard", "/dashboard"],
+  ["coins", "Long-term Contributions", "/dashboard/long-term"],
+  ["wallet", "Short-term Contributions", "/dashboard/short-term"],
+  ["document", "Transactions", "/dashboard/transactions"],
+  ["loan", "Loans", "/dashboard/loans"],
 ];
 
 export function MemberSidebar({ controls }: { controls: SidebarControls }) {
-  const { view, navigate } = useDashboard();
+  const pathname = usePathname();
   const { sidebar, mobile, open } = controls;
 
   return (
@@ -30,18 +31,19 @@ export function MemberSidebar({ controls }: { controls: SidebarControls }) {
     >
       <SidebarHeader controls={controls} />
       <nav aria-label="Dashboard pages">
-        {navigation.map(([icon, label]) => (
-          <button
+        {navigation.map(([icon, label, href]) => (
+          <Link
+            href={href}
             key={label}
-            className={view === label ? "is-active" : ""}
-            aria-current={view === label ? "page" : undefined}
+            className={pathname === href ? "is-active" : ""}
+            aria-current={pathname === href ? "page" : undefined}
             aria-label={label}
             title={label}
-            onClick={() => navigate(label)}
+            onClick={() => controls.setOpen(false)}
           >
             <Glyph name={icon} />
             <span>{label}</span>
-          </button>
+          </Link>
         ))}
       </nav>
       <SidebarAccount controls={controls} />

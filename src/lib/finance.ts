@@ -109,7 +109,6 @@ export interface Eligibility {
     flatFeeBps: number;
     maxMonths: number;
     termsVersion: string;
-    termsUrl: string;
   };
   snapshot: {
     investmentValue: number;

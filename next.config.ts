@@ -1,14 +1,21 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
-const apiUrl = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000");
+const apiUrl = new URL(
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000",
+);
 if (
   !["http:", "https:"].includes(apiUrl.protocol) ||
-  apiUrl.origin !== (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") ||
-  apiUrl.username || apiUrl.password || apiUrl.hostname.includes("*") ||
+  apiUrl.origin !==
+    (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000") ||
+  apiUrl.username ||
+  apiUrl.password ||
+  apiUrl.hostname.includes("*") ||
   (!isDevelopment && apiUrl.protocol !== "https:")
 ) {
-  throw new Error("NEXT_PUBLIC_API_URL must be HTTP(S), without credentials, and HTTPS in production");
+  throw new Error(
+    "NEXT_PUBLIC_API_URL must be HTTP(S), without credentials, and HTTPS in production",
+  );
 }
 
 // Static/partially prerendered pages need inline hydration scripts. Before
@@ -30,20 +37,54 @@ const contentSecurityPolicy = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    // Preserve checkout URLs that were initialized before dashboard routes split.
+    const legacyPages = [
+      ["Long-term Contributions", "long-term"],
+      ["Short-term Contributions", "short-term"],
+      ["Transactions", "transactions"],
+      ["Loans", "loans"],
+      ["Profile & Settings", "profile"],
+    ];
+    return [
+      ...["reference", "trxref"].map((key) => ({
+        source: "/dashboard",
+        has: [{ type: "query" as const, key }],
+        destination: "/dashboard/transactions",
+        permanent: false,
+      })),
+      ...legacyPages.map(([value, slug]) => ({
+        source: "/dashboard",
+        has: [{ type: "query" as const, key: "view", value }],
+        destination: `/dashboard/${slug}`,
+        permanent: false,
+      })),
+    ];
+  },
   async headers() {
-    return [{
-      source: "/:path*",
-      headers: [
-        { key: "Content-Security-Policy", value: contentSecurityPolicy },
-        { key: "X-Content-Type-Options", value: "nosniff" },
-        { key: "X-Frame-Options", value: "DENY" },
-        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-        { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-        ...(!isDevelopment ? [{
-          key: "Strict-Transport-Security", value: "max-age=31536000",
-        }] : []),
-      ],
-    }];
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: contentSecurityPolicy },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+          ...(!isDevelopment
+            ? [
+                {
+                  key: "Strict-Transport-Security",
+                  value: "max-age=31536000",
+                },
+              ]
+            : []),
+        ],
+      },
+    ];
   },
   cacheComponents: true,
   partialPrefetching: true,

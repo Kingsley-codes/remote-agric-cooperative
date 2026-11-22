@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Glyph, type Identity } from "@/components/dashboard/dashboard-ui";
 import { DashboardContext } from "@/components/dashboard/dashboard-context";
 import { MemberSidebar } from "@/components/dashboard/member-sidebar";
@@ -8,40 +8,12 @@ import { useSidebar } from "@/components/dashboard/use-sidebar";
 import { useAccount } from "@/lib/use-account";
 import "@/components/dashboard/dashboard.css";
 
-const subscribeLocation = (notify: () => void) => {
-  window.addEventListener("popstate", notify);
-  return () => window.removeEventListener("popstate", notify);
-};
-const locationSnapshot = () => window.location.search;
-const serverLocation = () => "";
-
 export default function MemberDashboardLayout({
   children,
 }: {
   children: ReactNode;
 }) {
   const { account, error, retry } = useAccount("member");
-  const locationSearch = useSyncExternalStore(
-    subscribeLocation,
-    locationSnapshot,
-    serverLocation,
-  );
-  const params = new URLSearchParams(locationSearch);
-  const requested =
-    params.get("reference") || params.get("trxref")
-      ? "Transactions"
-      : params.get("view");
-  const view =
-    requested &&
-    [
-      "Long-term Contributions",
-      "Short-term Contributions",
-      "Transactions",
-      "Loans",
-      "Profile & Settings",
-    ].includes(requested)
-      ? requested
-      : "Dashboard";
   const sidebarControls = useSidebar();
   const { collapsed, open, setOpen, mobile, opener } = sidebarControls;
   const identity: Identity = {
@@ -49,13 +21,6 @@ export default function MemberDashboardLayout({
     email: account?.email ?? "",
     reference: account?.farmerID,
   };
-  function navigate(next: string) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("view", next);
-    window.history.pushState(null, "", url);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-    setOpen(false);
-  }
 
   if (error)
     return (
@@ -72,7 +37,7 @@ export default function MemberDashboardLayout({
     );
 
   return (
-    <DashboardContext.Provider value={{ identity, view, navigate }}>
+    <DashboardContext.Provider value={{ identity }}>
       <div className={`dash-shell  ${collapsed ? "is-collapsed" : ""}`}>
         {mobile && open && (
           <button
