@@ -237,9 +237,16 @@ export default function MembersPage() {
           </div>
         </div>
       </section>
-      <dialog className="fin-dialog" ref={dialog}>
+      <dialog
+        className="fin-dialog"
+        ref={dialog}
+        aria-labelledby="member-dialog-title"
+        onCancel={(event) => {
+          if (busy) event.preventDefault();
+        }}
+      >
         <div className="fin-dialog-heading">
-          <h2>Member details</h2>
+          <h2 id="member-dialog-title">Member details</h2>
           <button
             aria-label="Close dialog"
             disabled={busy}

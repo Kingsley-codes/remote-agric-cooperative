@@ -123,7 +123,7 @@ export function FinanceScreen({
     category: "",
     ...periodDates("this_week"),
     reconciliation: "",
-    memberId: "",
+    reported: "",
     page: 1,
   });
   const [period, setPeriod] = useState("this_week");
@@ -672,7 +672,7 @@ export function FinanceScreen({
           {!admin && loans && (
             <p className="fin-muted">
               {eligibility?.policy.enabled
-                ? `${eligibility.policy.flatFeeBps / 100}% flat fee ? Up to ${eligibility.policy.maxMonths} months`
+                ? `${eligibility.policy.flatFeeBps / 100}% flat fee - Up to ${eligibility.policy.maxMonths} months`
                 : "Loan terms are not configured yet."}
               {!eligibility?.snapshot &&
                 " Contact the cooperative to verify your investment eligibility."}
@@ -1078,6 +1078,18 @@ export function FinanceScreen({
               setFilters((current) => ({ ...current, ...dates, page: 1 }));
             }}
           />
+          {admin && !loans && !contributions && (
+            <label>
+              <span>Reported issues</span>
+              <select
+                value={filters.reported}
+                onChange={(e) => filter("reported", e.target.value)}
+              >
+                <option value="">All transactions</option>
+                <option value="open">With open reports</option>
+              </select>
+            </label>
+          )}
           {admin && !loans && (
             <label>
               <span>Reconciliation</span>
@@ -1147,8 +1159,8 @@ export function FinanceScreen({
                     className="fin-clickable-row"
                     onClick={() => open("details", row)}
                   >
-                    <td data-label={loans ? "Loan" : "Date & reference"}>
-                      <strong>{row.id ?? "ID pending migration"}</strong>
+                    <td data-label="ID">
+                      <strong>{row.id ?? "Unavailable"}</strong>
                       <small className="fin-reference">
                         {financeDate(row.createdAt)}
                       </small>
