@@ -52,19 +52,24 @@ export async function financeRequest<T>(
 }
 export interface FinanceRecord {
   _id: string;
+  id: string;
+  member?: { name: string; email: string; phone?: string } | null;
+  linked?: FinanceRecord | null;
+  reports?: { reason: string; status: string; createdAt: string }[];
   memberId: string;
   reference?: string;
   amount: number;
   currency?: string;
   createdAt: string;
   paidAt?: string;
-  checkoutUrl?: string;
+  destination?: string;
+  providerId?: string;
   status: string;
   type?: string;
   category?: string;
   reconciliation?: string;
-  linkedId?: string;
-  direction?: string;
+  contributionid?: string;
+  loanid?: string;
   months?: number;
   fee?: number;
   totalDue?: number;
@@ -92,6 +97,9 @@ export interface FinanceList {
   asOf: string;
 }
 export interface Summary {
+  operations?: { pendingLoans: number; paymentExceptions: number };
+  estimatedShare: number | null;
+  allocatedGain: number | null;
   loanOutstanding: number;
   loanRepaid: number;
   longTerm: number;

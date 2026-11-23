@@ -2,9 +2,8 @@
 
 import { useDashboard } from "@/components/dashboard/dashboard-context";
 
-export default function Page() {
+export default function AdminSettingsPage() {
   const { identity } = useDashboard();
-  const admin = true;
   return (
     <main className="dash-content">
       <div className="dash-page-heading">
@@ -15,7 +14,7 @@ export default function Page() {
         </div>
       </div>
       <section className="dash-panel dash-section-panel">
-        <h2>{admin ? "Administrator profile" : "Your profile"}</h2>
+        <h2>Administrator profile</h2>
         <p>Your signed-in account details.</p>
         <dl className="dash-details">
           <div>
@@ -27,12 +26,8 @@ export default function Page() {
             <dd>{identity.email}</dd>
           </div>
           <div>
-            <dt>{admin ? "Access" : "Farmer ID"}</dt>
-            <dd>
-              {admin
-                ? "Cooperative administrator"
-                : identity.reference || "Not available"}
-            </dd>
+            <dt>Access</dt>
+            <dd>Cooperative administrator</dd>
           </div>
         </dl>
         <p>Profile editing will be available in a future update.</p>

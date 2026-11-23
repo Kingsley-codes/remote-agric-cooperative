@@ -11,8 +11,9 @@ const navigation = [
   ["home", "Dashboard", "/dashboard"],
   ["coins", "Long-term Contributions", "/dashboard/long-term"],
   ["wallet", "Short-term Contributions", "/dashboard/short-term"],
-  ["document", "Transactions", "/dashboard/transactions"],
   ["loan", "Loans", "/dashboard/loans"],
+  ["document", "Transactions", "/dashboard/transactions"],
+  ["document", "How it works", "/dashboard/how-it-works"],
 ];
 
 export function MemberSidebar({ controls }: { controls: SidebarControls }) {

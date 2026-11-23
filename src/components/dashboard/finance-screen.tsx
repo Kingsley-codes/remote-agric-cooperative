@@ -8,6 +8,9 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
+import { PeriodFilter, periodDates } from "./period-filter";
+import { AdminFinanceTools } from "./admin-finance-tools";
+import { OverviewSummary } from "./overview-summary";
 import { Glyph } from "./dashboard-ui";
 import { useRouter } from "next/navigation";
 import { LoanTerms } from "@/components/loan-terms";
@@ -86,9 +89,13 @@ function Detail({ label, children }: { label: string; children: ReactNode }) {
 export function FinanceScreen({
   section,
   admin = false,
+  overview = false,
+  reports = false,
 }: {
   section: keyof typeof titles;
   admin?: boolean;
+  overview?: boolean;
+  reports?: boolean;
 }) {
   const router = useRouter();
   const longTerm = section === "Long-term Contributions";
@@ -114,12 +121,12 @@ export function FinanceScreen({
     search: "",
     status: "",
     category: "",
-    from: "",
-    to: "",
+    ...periodDates("this_week"),
     reconciliation: "",
     memberId: "",
     page: 1,
   });
+  const [period, setPeriod] = useState("this_week");
   const [refresh, setRefresh] = useState(0);
   const [selection, setSelection] = useState<FinanceRecord | null>(null);
   const [mode, setMode] = useState<
@@ -138,9 +145,16 @@ export function FinanceScreen({
   const [consent, setConsent] = useState(false);
   const [review, setReview] = useState(false);
   const [formError, setFormError] = useState("");
+  const [reporting, setReporting] = useState(false);
+  const [linkedRecord, setLinkedRecord] = useState<FinanceRecord | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [reason, setReason] = useState("");
   const [memberId, setMemberId] = useState("");
   const [investment, setInvestment] = useState("");
+  const [memberSearch, setMemberSearch] = useState("");
+  const [memberOptions, setMemberOptions] = useState<
+    { _id: string; firstName: string; lastName: string; email: string }[]
+  >([]);
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState<{
     enabled: boolean;
@@ -151,6 +165,7 @@ export function FinanceScreen({
   const [banks, setBanks] = useState<{ name: string; code: string }[]>([]);
   const [bankCode, setBankCode] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const detailRequest = useRef(0);
   const requestKey = useRef("");
   const dialog = useRef<HTMLDialogElement>(null);
   const amountKobo = Math.round(Number(amount) * 100);
@@ -256,6 +271,27 @@ export function FinanceScreen({
     return () => window.clearTimeout(timer);
   }, [admin, verify, router]);
 
+  useEffect(() => {
+    if (mode !== "eligibility") return;
+    let active = true;
+    const timer = window.setTimeout(
+      () =>
+        financeRequest<{ items: typeof memberOptions }>(
+          `/admin/finance/members?status=active&search=${encodeURIComponent(memberSearch)}`,
+        )
+          .then((data) => {
+            if (active) setMemberOptions(data.items);
+          })
+          .catch((error) => {
+            if (active) setFormError(error.message);
+          }),
+      200,
+    );
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [mode, memberSearch]);
   function open(
     next: NonNullable<typeof mode>,
     record: FinanceRecord | null = null,
@@ -265,6 +301,26 @@ export function FinanceScreen({
     setReview(false);
     setFormError("");
     setReason("");
+    setReporting(false);
+    setLinkedRecord(null);
+    const detailVersion = ++detailRequest.current;
+    if (next === "details" && record?.id) {
+      setDetailLoading(true);
+      financeRequest<FinanceRecord>(`${prefix}/records/${kind}/${record.id}`)
+        .then((detail) => {
+          if (detailVersion === detailRequest.current) {
+            setSelection(detail);
+            setLinkedRecord(detail.linked ?? null);
+          }
+        })
+        .catch((error) => {
+          if (detailVersion === detailRequest.current)
+            setFormError(error.message);
+        })
+        .finally(() => {
+          if (detailVersion === detailRequest.current) setDetailLoading(false);
+        });
+    }
     setConsent(false);
     setAmount("");
     setPurpose("");
@@ -460,6 +516,71 @@ export function FinanceScreen({
       setBusy(false);
     }
   }
+  async function exportRecords() {
+    setBusy(true);
+    try {
+      const records: FinanceRecord[] = [];
+      const params = new URLSearchParams(query);
+      for (let page = 1; ; page++) {
+        params.set("page", String(page));
+        const result = await financeRequest<FinanceList>(
+          `${prefix}/${kind}?${params}`,
+        );
+        records.push(...result.items);
+        if (page * 20 >= result.total) break;
+        if (page >= 10000)
+          throw new Error("Narrow the date range before exporting.");
+      }
+      const cells = [
+        [
+          "ID",
+          "Date",
+          "Member",
+          "Email",
+          "Phone",
+          "Category",
+          "Amount (NGN)",
+          "Status",
+        ],
+        ...records.map((row) => [
+          row.id,
+          row.createdAt,
+          row.member?.name ?? "",
+          row.member?.email ?? "",
+          row.member?.phone ?? "",
+          row.type ?? row.category ?? "loan",
+          String(row.amount / 100),
+          row.status,
+        ]),
+      ];
+      const csv = cells
+        .map((row) =>
+          row
+            .map(
+              (value) =>
+                '"' +
+                String(value ?? "")
+                  .replace(/^[=+@-]/, "'$&")
+                  .replaceAll('"', '""') +
+                '"',
+            )
+            .join(","),
+        )
+        .join("\r\n");
+      const url = URL.createObjectURL(
+        new Blob([csv], { type: "text/csv;charset=utf-8" }),
+      );
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `cooperative-${kind}.csv`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Export failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
   function filter(key: keyof typeof filters, value: string) {
     setLoading(true);
     setFilters((current) => ({ ...current, [key]: value, page: 1 }));
@@ -482,11 +603,31 @@ export function FinanceScreen({
             <span>/</span>{" "}
             {contributions ? "Contributions" : loans ? "Borrowing" : "Activity"}
           </p>
-          <h1>{titles[section]}</h1>
+          <h1>
+            {overview
+              ? admin
+                ? "Operations overview"
+                : "My dashboard"
+              : reports
+                ? "Reports & exports"
+                : admin && loans
+                  ? "Loan operations"
+                  : admin && longTerm
+                    ? "Long-term contributions"
+                    : admin && contributions
+                      ? "Savings & withdrawals"
+                      : titles[section]}
+          </h1>
           <p>
-            {admin && contributions
-              ? `Manage ${longTerm ? "long-term" : "short-term"} contributions across the cooperative.`
-              : descriptions[section]}
+            {overview
+              ? admin
+                ? "Review pending loans, payment exceptions and cooperative activity."
+                : "Your balances and recent activity."
+              : reports
+                ? "Filter cooperative transactions and export the selected records."
+                : admin && contributions
+                  ? `Manage ${longTerm ? "long-term" : "short-term"} contributions across the cooperative.`
+                  : descriptions[section]}
           </p>
         </div>
         <div className="fin-heading-actions">
@@ -518,6 +659,24 @@ export function FinanceScreen({
               <Glyph name="plus" />
               Apply for a loan
             </button>
+          )}
+          {!admin && contributions && !longTerm && (
+            <button
+              className="fin-secondary"
+              disabled={busy || !destination?.enabled}
+              onClick={() => void setupBank()}
+            >
+              Payout account
+            </button>
+          )}
+          {!admin && loans && (
+            <p className="fin-muted">
+              {eligibility?.policy.enabled
+                ? `${eligibility.policy.flatFeeBps / 100}% flat fee ? Up to ${eligibility.policy.maxMonths} months`
+                : "Loan terms are not configured yet."}
+              {!eligibility?.snapshot &&
+                " Contact the cooperative to verify your investment eligibility."}
+            </p>
           )}
           {admin && loans && (
             <button
@@ -568,318 +727,236 @@ export function FinanceScreen({
           </button>
         </div>
       )}
-      {contributions ? (
-        <>
-          <div className="fin-stats">
-            {admin ? (
-              <>
-                <Stat
-                  icon="check"
-                  label="Confirmed contributions"
-                  value={value(total("successful"))}
-                  note="Successful deposits - selected filters"
-                />
-                <Stat
-                  icon="document"
-                  label="Pending contributions"
-                  value={value(total("pending"))}
-                  note="Awaiting payment confirmation - selected filters"
-                />
-                <Stat
-                  icon="close"
-                  label="Failed contributions"
-                  value={noData ? "—" : String(count("failed"))}
-                  note="Unsuccessful attempts - selected filters"
-                />
-                <Stat
-                  icon="document"
-                  label="Reversed contributions"
-                  value={value(total("reversed"))}
-                  note="Reversed deposits - selected filters"
-                />
-              </>
-            ) : (
-              <>
-                <Stat
-                  icon={longTerm ? "sprout" : "wallet"}
-                  label={
-                    admin
-                      ? "Confirmed contributions"
-                      : longTerm
-                        ? "My confirmed contributions"
-                        : "Available savings"
-                  }
-                  value={value(
-                    admin
-                      ? total("successful")
-                      : longTerm
-                        ? summary?.longTerm
-                        : summary?.available,
-                  )}
-                  note={
-                    admin
-                      ? "Successful deposits · selected filters"
-                      : longTerm
-                        ? "Successful deposits into your long-term pool"
-                        : "Confirmed funds, less reserved and completed withdrawals"
-                  }
-                />
-                <Stat
-                  icon="document"
-                  label={
-                    longTerm
-                      ? "Contributions awaiting payment"
-                      : "Pending withdrawals"
-                  }
-                  value={value(
-                    longTerm ? total("pending") : summary?.pendingWithdrawals,
-                  )}
-                  note={
-                    longTerm
-                      ? "Not included in confirmed contributions"
-                      : "Reserved while payout confirmation is pending"
-                  }
-                />
-                <Stat
-                  icon="coins"
-                  label={
-                    longTerm ? "Estimated share value" : "Total contributed"
-                  }
-                  value={
-                    longTerm
-                      ? "Unavailable"
-                      : value(admin ? total("successful") : summary?.shortTerm)
-                  }
-                  note={
-                    longTerm
-                      ? "An approved allocation is required"
-                      : "All confirmed short-term contributions"
-                  }
-                />
-                <Stat
-                  icon="document"
-                  label={longTerm ? "Minimum lock-in" : "Completed withdrawals"}
-                  value={
-                    longTerm ? "5 years" : value(summary?.completedWithdrawals)
-                  }
-                  note={
-                    longTerm
-                      ? "Start date and release rules follow final terms"
-                      : "Payouts confirmed as completed"
-                  }
-                />
-              </>
-            )}
-          </div>
-          <div className="fin-context-grid">
-            <section className="fin-context">
-              <span className="fin-context-icon text-brand-content">
-                <Glyph name={longTerm ? "sprout" : "wallet"} />
-              </span>
-              <div>
-                <h2>
-                  {longTerm
-                    ? "A longer view. A shared future."
-                    : "Savings that follow your pace."}
-                </h2>
-                <p>
-                  {longTerm
-                    ? "Your contributions form part of the cooperative’s agricultural pool. Asset values may rise or fall; contributions and investment returns are reported separately."
-                    : "Contribute whenever it suits you. Pending payments stay separate from your available savings until they are confirmed."}
-                </p>
-              </div>
-            </section>
-            <aside className="fin-terms">
-              <span className="fin-eyebrow">
-                {longTerm ? "Before you contribute" : "Accessing your savings"}
-              </span>
-              <h2>
-                {longTerm
-                  ? "Built for long-term commitment"
-                  : "Withdrawals & availability"}
-              </h2>
-              <p>
-                {longTerm
-                  ? "Plan for a minimum five-year commitment. Your accepted terms govern lock-in dates and release conditions. There is no guaranteed return."
-                  : "Withdrawal requests must pass balance, bank account and liquidity checks. Availability and fees will be shown before confirmation."}
-              </p>
-              {!longTerm && (
+      {overview && <OverviewSummary admin={admin} summary={summary} />}
+      {!overview &&
+        (contributions ? (
+          <>
+            <div className="fin-stats">
+              {admin ? (
                 <>
-                  {!destination?.enabled ? (
-                    <span className="fin-muted">
-                      Withdrawals will be available when payouts are enabled.
-                    </span>
-                  ) : (
-                    <div className="fin-destination">
-                      <span>
-                        {destination.destination
-                          ? `${destination.destination.name} - **** ${destination.destination.last4}`
-                          : "Add a verified bank account to receive payouts."}
-                      </span>
-                      <button disabled={busy} onClick={() => void setupBank()}>
-                        {destination.destination
-                          ? "Update bank account"
-                          : "Set payout account"}
-                      </button>
-                    </div>
-                  )}
+                  <Stat
+                    icon="check"
+                    label="Confirmed contributions"
+                    value={value(total("successful"))}
+                    note="Successful deposits - selected filters"
+                  />
+                  <Stat
+                    icon="document"
+                    label="Pending contributions"
+                    value={value(total("pending"))}
+                    note="Awaiting payment confirmation - selected filters"
+                  />
+                  <Stat
+                    icon="close"
+                    label="Failed contributions"
+                    value={noData ? "—" : String(count("failed"))}
+                    note="Unsuccessful attempts - selected filters"
+                  />
+                  <Stat
+                    icon="document"
+                    label="Reversed contributions"
+                    value={value(total("reversed"))}
+                    note="Reversed deposits - selected filters"
+                  />
+                </>
+              ) : (
+                <>
+                  <Stat
+                    icon={longTerm ? "sprout" : "wallet"}
+                    label={
+                      admin
+                        ? "Confirmed contributions"
+                        : longTerm
+                          ? "My confirmed contributions"
+                          : "Available savings"
+                    }
+                    value={value(
+                      admin
+                        ? total("successful")
+                        : longTerm
+                          ? summary?.longTerm
+                          : summary?.available,
+                    )}
+                    note={
+                      admin
+                        ? "Successful deposits · selected filters"
+                        : longTerm
+                          ? "Successful deposits into your long-term pool"
+                          : "Confirmed funds, less reserved and completed withdrawals"
+                    }
+                  />
+                  <Stat
+                    icon="document"
+                    label={
+                      longTerm
+                        ? "Contributions awaiting payment"
+                        : "Pending withdrawals"
+                    }
+                    value={value(
+                      longTerm ? total("pending") : summary?.pendingWithdrawals,
+                    )}
+                    note={
+                      longTerm
+                        ? "Not included in confirmed contributions"
+                        : "Reserved while payout confirmation is pending"
+                    }
+                  />
+                  <Stat
+                    icon="coins"
+                    label={
+                      longTerm ? "Estimated share value" : "Total contributed"
+                    }
+                    value={
+                      longTerm
+                        ? summary?.estimatedShare == null
+                          ? "Unavailable"
+                          : value(summary.estimatedShare)
+                        : value(
+                            admin ? total("successful") : summary?.shortTerm,
+                          )
+                    }
+                    note={
+                      longTerm
+                        ? summary?.estimatedShare == null
+                          ? "Awaiting approved valuation"
+                          : `Valuation: ${financeDate(summary?.valuation?.valuedAt)}`
+                        : "All confirmed short-term contributions"
+                    }
+                  />
+                  <Stat
+                    icon="document"
+                    label={
+                      longTerm ? "Minimum lock-in" : "Completed withdrawals"
+                    }
+                    value={
+                      longTerm
+                        ? "5 years"
+                        : value(summary?.completedWithdrawals)
+                    }
+                    note={
+                      longTerm
+                        ? "Start date and release rules follow final terms"
+                        : "Payouts confirmed as completed"
+                    }
+                  />
                 </>
               )}
-            </aside>
-          </div>
-        </>
-      ) : loans ? (
-        <>
+            </div>
+          </>
+        ) : loans ? (
+          <>
+            <div className="fin-stats">
+              <Stat
+                icon="loan"
+                label={
+                  admin ? "Active outstanding balance" : "Outstanding balance"
+                }
+                value={
+                  noData
+                    ? "—"
+                    : currency(
+                        admin
+                          ? (list?.totals.find((row) => row._id === "active")
+                              ?.outstanding ?? 0)
+                          : outstanding,
+                      )
+                }
+                note={
+                  admin
+                    ? "Active loans · selected filters"
+                    : "Principal and fees less confirmed repayments"
+                }
+              />
+              <Stat
+                icon="document"
+                label="Applications in review"
+                value={noData ? "—" : String(count("pending_review"))}
+                note="Awaiting an administrator’s decision"
+              />
+              <Stat
+                icon="check"
+                label={admin ? "Approved principal" : "Amount repaid"}
+                value={
+                  noData
+                    ? "—"
+                    : currency(
+                        admin ? total("approved") : (summary?.loanRepaid ?? 0),
+                      )
+                }
+                note={
+                  admin
+                    ? "Approved, awaiting disbursement"
+                    : "Confirmed repayments on your active loan"
+                }
+              />
+              <Stat
+                icon="wallet"
+                label={admin ? "Repaid loans" : "Maximum eligible request"}
+                value={
+                  noData
+                    ? "—"
+                    : admin
+                      ? String(count("repaid"))
+                      : eligibility?.snapshot
+                        ? currency(eligibility.snapshot.maximum)
+                        : "Unavailable"
+                }
+                note={
+                  admin
+                    ? "Loans paid in full · selected filters"
+                    : "Based on a current verified investment assessment"
+                }
+              />
+            </div>
+            {!admin && destination?.enabled && (
+              <div className="fin-destination">
+                <span>
+                  {destination.destination
+                    ? `Payout account: ${destination.destination.name} - **** ${destination.destination.last4}`
+                    : "A verified payout account is needed before loan disbursement."}
+                </span>
+                <button disabled={busy} onClick={() => void setupBank()}>
+                  {destination.destination
+                    ? "Update bank account"
+                    : "Set payout account"}
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
           <div className="fin-stats">
             <Stat
-              icon="loan"
-              label={
-                admin ? "Active outstanding balance" : "Outstanding balance"
-              }
-              value={
-                noData
-                  ? "—"
-                  : currency(
-                      admin
-                        ? (list?.totals.find((row) => row._id === "active")
-                            ?.outstanding ?? 0)
-                        : outstanding,
-                    )
-              }
-              note={
-                admin
-                  ? "Active loans · selected filters"
-                  : "Principal and fees less confirmed repayments"
-              }
-            />
-            <Stat
-              icon="document"
-              label="Applications in review"
-              value={noData ? "—" : String(count("pending_review"))}
-              note="Awaiting an administrator’s decision"
-            />
-            <Stat
+              label="Successful payment volume"
+              value={noData ? "—" : currency(total("successful"))}
+              note="Successful ledger entries · selected filters"
               icon="check"
-              label={admin ? "Approved principal" : "Amount repaid"}
-              value={
-                noData
-                  ? "—"
-                  : currency(
-                      admin ? total("approved") : (summary?.loanRepaid ?? 0),
-                    )
-              }
-              note={
-                admin
-                  ? "Approved, awaiting disbursement"
-                  : "Confirmed repayments on your active loan"
-              }
             />
             <Stat
-              icon="wallet"
-              label={admin ? "Repaid loans" : "Maximum eligible request"}
-              value={
-                noData
-                  ? "—"
-                  : admin
-                    ? String(count("repaid"))
-                    : eligibility?.snapshot
-                      ? currency(eligibility.snapshot.maximum)
-                      : "Unavailable"
-              }
-              note={
-                admin
-                  ? "Loans paid in full · selected filters"
-                  : "Based on a current verified investment assessment"
-              }
+              label="Pending payments"
+              value={noData ? "—" : currency(total("pending"))}
+              note="Awaiting authoritative confirmation"
+              icon="document"
+            />
+            <Stat
+              label="Failed payments"
+              value={noData ? "—" : String(count("failed"))}
+              note="No funds credited for these payments"
+              icon="close"
+            />
+            <Stat
+              label="Records found"
+              value={noData ? "—" : String(list.total)}
+              note="Across your selected categories and dates"
+              icon="document"
             />
           </div>
-          {!admin && (
-            <section className="fin-eligibility">
-              <div>
-                <span className="fin-eyebrow">Your eligibility</span>
-                <h2>
-                  {eligibility?.snapshot && eligibility.policy.enabled
-                    ? "Your investment assessment is ready"
-                    : "Eligibility must be verified before you apply"}
-                </h2>
-                <p>
-                  {eligibility?.snapshot
-                    ? `Verified investment basis: ${currency(eligibility.snapshot.investmentValue)}. Assessment valid until ${financeDate(eligibility.snapshot.expiresAt)}.`
-                    : "A current Remote Agric investment assessment determines your request limit. Contact the cooperative to verify your eligibility."}
-                </p>
-              </div>
-              <dl>
-                <Detail label="Loan fee">
-                  {eligibility?.policy.enabled
-                    ? `${eligibility.policy.flatFeeBps / 100}% flat fee`
-                    : "Loan pricing unavailable"}
-                </Detail>
-                <Detail label="Repayment period">
-                  {eligibility?.policy.enabled
-                    ? `Up to ${eligibility.policy.maxMonths} months`
-                    : "Available when loan pricing is configured"}
-                </Detail>
-              </dl>
-            </section>
-          )}
-          {!admin && destination?.enabled && (
-            <div className="fin-destination">
-              <span>
-                {destination.destination
-                  ? `Payout account: ${destination.destination.name} - **** ${destination.destination.last4}`
-                  : "A verified payout account is needed before loan disbursement."}
-              </span>
-              <button disabled={busy} onClick={() => void setupBank()}>
-                {destination.destination
-                  ? "Update bank account"
-                  : "Set payout account"}
-              </button>
-            </div>
-          )}
-          <section className="fin-journey" aria-label="Loan process">
-            {[
-              "Apply",
-              "Admin review",
-              "Approval",
-              "Disbursement",
-              "Repayment",
-            ].map((label, index) => (
-              <div key={label}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                {label}
-              </div>
-            ))}
-          </section>
-        </>
-      ) : (
-        <div className="fin-stats">
-          <Stat
-            label="Successful payment volume"
-            value={noData ? "—" : currency(total("successful"))}
-            note="Successful ledger entries · selected filters"
-            icon="check"
-          />
-          <Stat
-            label="Pending payments"
-            value={noData ? "—" : currency(total("pending"))}
-            note="Awaiting authoritative confirmation"
-            icon="document"
-          />
-          <Stat
-            label="Failed payments"
-            value={noData ? "—" : String(count("failed"))}
-            note="No funds credited for these payments"
-            icon="close"
-          />
-          <Stat
-            label="Records found"
-            value={noData ? "—" : String(list.total)}
-            note="Across your selected categories and dates"
-            icon="document"
-          />
-        </div>
+        ))}
+      {admin && (loans || longTerm) && (
+        <AdminFinanceTools
+          loans={loans}
+          onSave={() => setRefresh((value) => value + 1)}
+        />
       )}
-
       <section className="fin-ledger" aria-busy={loading}>
         <div className="fin-section-heading">
           <div>
@@ -903,9 +980,18 @@ export function FinanceScreen({
                   : "Each contribution, its payment reference and confirmation status."
                 : loans
                   ? "Approval is a decision. Disbursement confirms that funds have been sent."
-                  : "Search by reference and filter by category, status or date."}
+                  : "Search by ID and filter by category, status or period."}
             </p>
           </div>
+          {admin && (
+            <button
+              className="fin-secondary"
+              disabled={busy || loading}
+              onClick={() => void exportRecords()}
+            >
+              Export CSV
+            </button>
+          )}
           <span className="fin-count">{list?.total ?? "—"} records</span>
         </div>
         {contributions && !longTerm && (
@@ -931,7 +1017,7 @@ export function FinanceScreen({
         )}
         <div className="fin-filters">
           <label className="fin-search">
-            <span>Search {loans ? "member ID" : "reference"}</span>
+            <span>{admin ? "Search ID, name or email" : "Search ID"}</span>
             <div>
               <Glyph name="search" />
               <input
@@ -982,34 +1068,16 @@ export function FinanceScreen({
               </select>
             </label>
           )}
-          <label>
-            <span>From</span>
-            <input
-              type="date"
-              value={filters.from}
-              onChange={(e) => filter("from", e.target.value)}
-              max={filters.to || undefined}
-            />
-          </label>
-          <label>
-            <span>To</span>
-            <input
-              type="date"
-              value={filters.to}
-              onChange={(e) => filter("to", e.target.value)}
-              min={filters.from || undefined}
-            />
-          </label>
-          {admin && (
-            <label>
-              <span>Member ID</span>
-              <input
-                value={filters.memberId}
-                onChange={(e) => filter("memberId", e.target.value)}
-                placeholder="Exact member ID"
-              />
-            </label>
-          )}
+          <PeriodFilter
+            value={period}
+            from={filters.from}
+            to={filters.to}
+            onChange={(next, dates) => {
+              setPeriod(next);
+              setLoading(true);
+              setFilters((current) => ({ ...current, ...dates, page: 1 }));
+            }}
+          />
           {admin && !loans && (
             <label>
               <span>Reconciliation</span>
@@ -1031,7 +1099,13 @@ export function FinanceScreen({
           <table>
             <thead>
               <tr>
-                <th>{loans ? "Loan reference" : "Date & reference"}</th>
+                <th>
+                  {loans
+                    ? "Loan ID"
+                    : contributions && history === "contributions"
+                      ? "Contribution ID"
+                      : "Transaction ID"}
+                </th>
                 {admin && <th>Member</th>}
                 <th>
                   {loans
@@ -1044,9 +1118,7 @@ export function FinanceScreen({
                   {loans ? "Principal" : "Amount"}
                 </th>
                 <th>Status</th>
-                <th>
-                  <span className="sr-only">Actions</span>
-                </th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -1070,20 +1142,24 @@ export function FinanceScreen({
                 </tr>
               ) : list?.items.length ? (
                 list.items.map((row) => (
-                  <tr key={row._id}>
+                  <tr
+                    key={row._id}
+                    className="fin-clickable-row"
+                    onClick={() => open("details", row)}
+                  >
                     <td data-label={loans ? "Loan" : "Date & reference"}>
-                      <strong>
-                        {loans
-                          ? `LOAN-${row._id.slice(-8).toUpperCase()}`
-                          : financeDate(row.createdAt)}
-                      </strong>
+                      <strong>{row.id ?? "ID pending migration"}</strong>
                       <small className="fin-reference">
-                        {loans ? financeDate(row.createdAt) : row.reference}
+                        {financeDate(row.createdAt)}
                       </small>
                     </td>
                     {admin && (
                       <td data-label="Member">
-                        <span className="fin-reference">{row.memberId}</span>
+                        <strong>
+                          {row.member?.name ?? "Member unavailable"}
+                        </strong>
+                        <small>{row.member?.email}</small>
+                        {row.member?.phone && <small>{row.member.phone}</small>}
                       </td>
                     )}
                     <td data-label={loans ? "Purpose" : "Category"}>
@@ -1128,13 +1204,29 @@ export function FinanceScreen({
                     <td>
                       <button
                         className="fin-row-link"
-                        onClick={() => open("details", row)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          open("details", row);
+                        }}
+                        aria-label={`View ${row.id}`}
+                        title="View details"
                       >
-                        {admin && row.status === "pending_review"
-                          ? "Review"
-                          : "View details"}
-                        <Glyph name="arrow" />
+                        <Glyph name="eye" />
                       </button>
+                      {!contributions && !loans && (
+                        <button
+                          className="fin-row-link"
+                          title="Report transaction"
+                          aria-label={`Report ${row.id}`}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            open("details", row);
+                            setReporting(true);
+                          }}
+                        >
+                          <Glyph name="flag" />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -1248,6 +1340,13 @@ export function FinanceScreen({
                 ? currency(summary.valuation.assetValue)
                 : "Not yet reported"}
             </Detail>
+            {!admin && (
+              <Detail label="Allocated gain / loss">
+                {summary?.allocatedGain == null
+                  ? "Awaiting approved valuation"
+                  : currency(summary.allocatedGain)}
+              </Detail>
+            )}
             <Detail label="Valuation date">
               {summary?.valuation
                 ? financeDate(summary.valuation.valuedAt)
@@ -1326,14 +1425,22 @@ export function FinanceScreen({
               <Status value={selection.status} />
             </div>
             <dl className="fin-details">
-              <Detail label="Reference">
-                {selection.reference ??
-                  `LOAN-${selection._id.slice(-8).toUpperCase()}`}
-              </Detail>
+              <Detail label="ID">{selection.id}</Detail>
+              {selection.reference && (
+                <Detail label="Payment reference">{selection.reference}</Detail>
+              )}
               <Detail label="Created">
                 {financeDate(selection.createdAt)}
               </Detail>
-              {admin && <Detail label="Member ID">{selection.memberId}</Detail>}
+              {selection.member && (
+                <>
+                  <Detail label="Member">{selection.member.name}</Detail>
+                  <Detail label="Email">{selection.member.email}</Detail>
+                  {selection.member.phone && (
+                    <Detail label="Phone">{selection.member.phone}</Detail>
+                  )}
+                </>
+              )}
               {loans ? (
                 <>
                   <Detail label="Purpose">{selection.purpose}</Detail>
@@ -1383,6 +1490,16 @@ export function FinanceScreen({
                   <Detail label="Category">
                     {categoryLabels[selection.type ?? selection.category ?? ""]}
                   </Detail>
+                  {selection.destination && (
+                    <Detail label="Payout destination">
+                      {selection.destination}
+                    </Detail>
+                  )}
+                  {admin && selection.providerId && (
+                    <Detail label="Provider reference">
+                      {selection.providerId}
+                    </Detail>
+                  )}
                   <Detail label="Confirmed on">
                     {financeDate(selection.paidAt)}
                   </Detail>
@@ -1394,12 +1511,117 @@ export function FinanceScreen({
                           : "unmatched"),
                     )}
                   </Detail>
-                  {selection.linkedId && (
-                    <Detail label="Related record">{selection.linkedId}</Detail>
+                  {(selection.contributionid || selection.loanid) && (
+                    <Detail label="Related ID">
+                      {selection.contributionid ?? selection.loanid}
+                    </Detail>
                   )}
                 </>
               )}
             </dl>
+            {admin && selection.reports?.length ? (
+              <section className="fin-linked">
+                <h3>Reported issues</h3>
+                {selection.reports.map((report, index) => (
+                  <div key={index}>
+                    <p>{report.reason}</p>
+                    <small>
+                      {financeDate(report.createdAt)} -{" "}
+                      {statusLabel(report.status)}
+                    </small>
+                  </div>
+                ))}
+              </section>
+            ) : null}
+            {detailLoading && <p role="status">Loading linked details...</p>}
+            {linkedRecord && (
+              <section className="fin-linked">
+                <h3>
+                  {selection.contributionid
+                    ? "Contribution details"
+                    : "Loan details"}
+                </h3>
+                <dl className="fin-details">
+                  <Detail label="ID">{linkedRecord.id}</Detail>
+                  <Detail label="Amount">
+                    {currency(linkedRecord.amount)}
+                  </Detail>
+                  <Detail label="Status">
+                    {statusLabel(linkedRecord.status)}
+                  </Detail>
+                  <Detail label="Created">
+                    {financeDate(linkedRecord.createdAt)}
+                  </Detail>
+                  {linkedRecord.purpose && (
+                    <>
+                      <Detail label="Purpose">{linkedRecord.purpose}</Detail>
+                      <Detail label="Term">{linkedRecord.months} months</Detail>
+                      <Detail label="Fee">
+                        {currency(linkedRecord.fee ?? 0)}
+                      </Detail>
+                      <Detail label="Outstanding">
+                        {currency(
+                          (linkedRecord.totalDue ?? 0) -
+                            (linkedRecord.repaidAmount ?? 0),
+                        )}
+                      </Detail>
+                    </>
+                  )}
+                </dl>
+              </section>
+            )}
+            {!contributions && !loans && (
+              <div className="fin-report">
+                <button
+                  className="fin-secondary"
+                  onClick={() => setReporting(!reporting)}
+                >
+                  <Glyph name="flag" /> Report transaction
+                </button>
+                {reporting && (
+                  <form
+                    className="fin-form"
+                    onSubmit={async (event) => {
+                      event.preventDefault();
+                      setBusy(true);
+                      setFormError("");
+                      try {
+                        await financeRequest(
+                          `${prefix}/transactions/${selection.id}/report`,
+                          { reason },
+                        );
+                        setNotice(
+                          "Your transaction report has been submitted.",
+                        );
+                        dialog.current?.close();
+                      } catch (error) {
+                        setFormError(
+                          error instanceof Error
+                            ? error.message
+                            : "Unable to submit report.",
+                        );
+                      } finally {
+                        setBusy(false);
+                      }
+                    }}
+                  >
+                    <label>
+                      Describe the issue
+                      <textarea
+                        required
+                        minLength={10}
+                        maxLength={2000}
+                        value={reason}
+                        onChange={(e) => setReason(e.target.value)}
+                      />
+                    </label>
+                    <button className="fin-primary" disabled={busy}>
+                      Submit report
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
             <p className="fin-detail-note">
               {selection.status === "pending"
                 ? "We are waiting for payment confirmation. This payment has not been credited."
@@ -1482,13 +1704,6 @@ export function FinanceScreen({
                     duplicate payout.
                   </p>
                 </div>
-              )}
-            {!loans &&
-              selection.status === "pending" &&
-              selection.checkoutUrl && (
-                <a className="fin-secondary" href={selection.checkoutUrl}>
-                  Continue payment on Paystack
-                </a>
               )}
             {!loans &&
               selection.status === "pending" &&
@@ -1702,13 +1917,32 @@ export function FinanceScreen({
                       the audit log.
                     </p>
                     <label>
-                      Member ID
+                      Find member
                       <input
+                        value={memberSearch}
+                        maxLength={100}
+                        onChange={(e) => {
+                          setMemberSearch(e.target.value);
+                          setMemberId("");
+                        }}
+                        placeholder="Name or email"
+                      />
+                    </label>
+                    <label>
+                      Member
+                      <select
                         required
-                        pattern="[a-f0-9]{24}"
                         value={memberId}
                         onChange={(e) => setMemberId(e.target.value)}
-                      />
+                      >
+                        <option value="">Select an active member</option>
+                        {memberOptions.map((member) => (
+                          <option key={member._id} value={member._id}>
+                            {member.firstName} {member.lastName} ({member.email}
+                            )
+                          </option>
+                        ))}
+                      </select>
                     </label>
                     <label>
                       Verified investment value (NGN)

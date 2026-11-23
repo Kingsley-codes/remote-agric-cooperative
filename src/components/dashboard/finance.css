@@ -765,7 +765,6 @@
     padding: 15px;
   }
   .fin-stat > div {
-    font-size: 14px;
     align-items: flex-start;
   }
   .fin-stat-icon {
@@ -800,59 +799,6 @@
   .fin-filters label.fin-search {
     flex-basis: 100%;
   }
-  .fin-screen table,
-  .fin-screen tbody,
-  .fin-screen tr,
-  .fin-screen td {
-    display: block;
-    width: 100%;
-  }
-  .fin-screen thead {
-    display: none;
-  }
-  .fin-screen tbody tr {
-    padding: 17px 16px;
-    border-top: 1px solid var(--fin-border);
-  }
-  .fin-screen td {
-    padding: 6px 0;
-    border: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .fin-screen td::before {
-    content: attr(data-label);
-    color: var(--fin-muted);
-    font-size: 14px;
-  }
-  .fin-screen td:first-child {
-    display: block;
-    margin-bottom: 7px;
-  }
-  .fin-screen td:first-child::before {
-    display: none;
-  }
-  .fin-screen td:last-child {
-    justify-content: flex-end;
-  }
-  .fin-screen td:last-child .fin-row-link {
-    min-height: 36px;
-  }
-  .fin-screen td small {
-    flex-basis: 100%;
-  }
-  .fin-screen td.fin-numeric small {
-    text-align: right;
-  }
-  .fin-screen td[colspan] {
-    display: block;
-  }
-  .fin-screen td[colspan]::before {
-    display: none;
-  }
   .fin-pagination {
     padding: 14px 16px;
   }
@@ -879,9 +825,6 @@
   .fin-journey {
     flex-wrap: wrap;
     gap: 12px 18px;
-  }
-  .fin-journey div {
-    font-size: 14px;
   }
   .fin-dialog {
     padding: 22px 18px;
@@ -1006,4 +949,79 @@
   .fin-screen td[colspan]::before {
     display: none;
   }
+}
+
+.fin-dialog .text-sm {
+  font-size: 1rem;
+}
+
+.fin-admin-tools {
+  background: #fff;
+  border: 1px solid #dce5de;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.fin-settings-form {
+  max-width: 760px;
+  margin-top: 20px;
+}
+.fin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 28px;
+}
+.fin-clickable-row {
+  cursor: pointer;
+}
+.fin-clickable-row:hover {
+  background: #f3f8f4;
+}
+.fin-row-link {
+  min-height: 40px;
+  min-width: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.fin-row-link svg {
+  width: 20px;
+  height: 20px;
+}
+.fin-linked {
+  border-top: 1px solid #dce5de;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.fin-report {
+  margin: 20px 0;
+}
+.fin-guide {
+  max-width: 960px;
+  display: grid;
+  gap: 24px;
+}
+.fin-guide section {
+  padding: 28px;
+  background: #fff;
+  border: 1px solid #dce5de;
+  border-radius: 16px;
+}
+.fin-guide h2 {
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+.fin-guide p,
+.fin-guide li {
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.fin-guide ol {
+  list-style: decimal;
+  padding-left: 24px;
+}
+.fin-guide a {
+  display: inline-flex;
+  margin-top: 12px;
 }
